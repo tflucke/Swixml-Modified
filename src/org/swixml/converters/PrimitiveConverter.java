@@ -67,106 +67,175 @@ import java.util.Map;
 
 /**
  * The <code>PrimitiveConverter</code> class defines a converter that creates primitive objects (wrapper),
- * based on a provided input Class and String.
+ * based on a provided input Class<?> and String.
  *
  * @author <a href="mailto:wolf@wolfpaulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
  * @see org.swixml.ConverterLibrary
  */
 
-public class PrimitiveConverter implements Converter, SwingConstants, ScrollPaneConstants, KeyEvent, InputEvent {
+public class PrimitiveConverter extends Converter<Object> implements SwingConstants,
+		ScrollPaneConstants, KeyEvent, InputEvent
+{
 
-  /** converter's return type */
-  public static final Class TEMPLATE = Object.class;
-  /** map contains all constant provider types */
-  private static Map<String, Class> dictionaries = new HashMap<String, Class>();
-  /**
-   * Static Initializer, setting up the initial constant providers
-   */
-  static {
-    PrimitiveConverter.addConstantProvider( JTabbedPane.class );
-    PrimitiveConverter.addConstantProvider( JScrollPane.class );
-    PrimitiveConverter.addConstantProvider( JSplitPane.class );
-    PrimitiveConverter.addConstantProvider( GridBagConstraints.class );
-    PrimitiveConverter.addConstantProvider( FlowLayout.class );
-    PrimitiveConverter.addConstantProvider( ListSelectionModel.class );
-    PrimitiveConverter.addConstantProvider( TreeSelectionModel.class );
-    PrimitiveConverter.addConstantProvider( JDialog.class );
-    PrimitiveConverter.addConstantProvider( JFrame.class );
-    PrimitiveConverter.addConstantProvider( TitledBorder.class );
-  }
-  /**
-   * Converts String into java primitive type
-   * @param type <code>Class</code> target type
-   * @param attr <code>Attribute</code> value field needs to provide convertable String
-   * @param localizer <code>Localizer</code>
-   * @return <code>Object</code> primitive wrapped into wrapper object
-   * @throws NoSuchFieldException in case no class a field matching field name had been regsitered with this converter
-   * @throws IllegalAccessException if a matching field can not be accessed
-   */
-  public static Object conv( final Class type, final Attribute attr,  final Localizer localizer ) throws NoSuchFieldException, IllegalAccessException {
-    Object obj = null;
-    if ( Parser.LOCALIZED_ATTRIBUTES.contains( attr.getName().toLowerCase() ))
-        attr.setValue( localizer.getString( attr.getValue() ));
+	/** converter's return type */
+	public static final Class<Object> TEMPLATE = Object.class;
+	/** map contains all constant provider types */
+	private static Map<String, Class<?>> dictionaries = new HashMap<String, Class<?>>();
+	/**
+	 * Static Initializer, setting up the initial constant providers
+	 */
+	static
+	{
+		PrimitiveConverter.addConstantProvider(JTabbedPane.class);
+		PrimitiveConverter.addConstantProvider(JScrollPane.class);
+		PrimitiveConverter.addConstantProvider(JSplitPane.class);
+		PrimitiveConverter.addConstantProvider(GridBagConstraints.class);
+		PrimitiveConverter.addConstantProvider(FlowLayout.class);
+		PrimitiveConverter.addConstantProvider(ListSelectionModel.class);
+		PrimitiveConverter.addConstantProvider(TreeSelectionModel.class);
+		PrimitiveConverter.addConstantProvider(JDialog.class);
+		PrimitiveConverter.addConstantProvider(JFrame.class);
+		PrimitiveConverter.addConstantProvider(TitledBorder.class);
+	}
 
-    try {
-      if (boolean.class.equals( type )) {
-        obj = Boolean.valueOf(attr.getValue());
-      } else if (int.class.equals( type )) {
-        obj = Integer.valueOf( attr.getValue() );
-      } else if (long.class.equals( type )) {
-        obj = Long.valueOf( attr.getValue() );
-      } else if (float.class.equals( type )) {
-        obj = Float.valueOf( attr.getValue() );
-      } else if (double.class.equals( type )) {
-        obj = Double.valueOf( attr.getValue() );
-      }
-    } catch (Exception e) { 
-      // intent. empty
-    } finally {
-      if (obj==null) {
-        try {
-          String s = attr.getValue();
-          int k = s.indexOf( '.' );
-          Class pp = dictionaries.get( s.substring( 0, k ) );
-          obj = pp.getField( s.substring( k + 1 ) ).get( pp );
-        } catch (Exception ex) {
-          //
-          //  Try to find the given value as a Constant in SwingConstants
-          //
-          obj = PrimitiveConverter.class.getField( attr.getValue() ).get( PrimitiveConverter.class );
-        }
-      }
-    }
+	/**
+	 * Converts String into java primitive type
+	 * @param type <code>Class<?></code> target type
+	 * @param attr <code>Attribute</code> value field needs to provide convertable String
+	 * @param localizer <code>Localizer</code>
+	 * @return <code>Object</code> primitive wrapped into wrapper object
+	 * @throws NoSuchFieldException in case no class a field matching field name had been regsitered with this converter
+	 * @throws IllegalAccessException if a matching field can not be accessed
+	 */
+	public static Object conv(final Class<? extends Object> type, final Attribute attr,
+			final Localizer localizer) throws NoSuchFieldException, IllegalAccessException
+	{
+		Object obj = null;
+		if (Parser.LOCALIZED_ATTRIBUTES.contains(attr.getName().toLowerCase()))
+			attr.setValue(localizer.getString(attr.getValue()));
 
-    return obj;
-  }
+		try
+		{
+			if (boolean.class.equals(type))
+			{
+				obj = Boolean.valueOf(attr.getValue());
+			}
+			else if (int.class.equals(type))
+			{
+				obj = Integer.valueOf(attr.getValue());
+			}
+			else if (long.class.equals(type))
+			{
+				obj = Long.valueOf(attr.getValue());
+			}
+			else if (float.class.equals(type))
+			{
+				obj = Float.valueOf(attr.getValue());
+			}
+			else if (double.class.equals(type))
+			{
+				obj = Double.valueOf(attr.getValue());
+			}
+		}
+		catch (Exception e)
+		{
+			// intent. empty
+		}
+		finally
+		{
+			if (obj == null)
+			{
+				try
+				{
+					String s = attr.getValue();
+					int k = s.indexOf('.');
+					Class<?> pp = dictionaries.get(s.substring(0, k));
+					obj = pp.getField(s.substring(k + 1)).get(pp);
+				}
+				catch (Exception ex)
+				{
+					//
+					//  Try to find the given value as a Constant in SwingConstants
+					//
+					obj = PrimitiveConverter.class.getField(attr.getValue()).get(
+							PrimitiveConverter.class);
+				}
+			}
+		}
 
-  /**
-   * Converts String into java primitive type
-   * @param type <code>Class</code> target type
-   * @param attr <code>Attribute</code> value field needs to provide convertable String
-   * @return <code>Object</code> primitive wrapped into wrapper object
-   * @throws Exception
-   */
-  public Object convert( final Class type, final Attribute attr, final Localizer localizer ) throws Exception {
-    return PrimitiveConverter.conv( type, attr, localizer );
-  }
+		return obj;
+	}
 
-  /**
-   * A <code>Converters</code> conversTo method informs about the Class type the converter
-   * is returning when its <code>convert</code> method is called
-   * @return <code>Class</code> - the Class the converter is returning when its convert method is called
-   */
-  public Class convertsTo() {
-    return TEMPLATE;
-  }
+	/**
+	 * Converts String into java primitive type
+	 * @param type <code>Class<?></code> target type
+	 * @param attr <code>Attribute</code> value field needs to provide convertable String
+	 * @return <code>Object</code> primitive wrapped into wrapper object
+	 * @throws Exception
+	 */
+	public Object convert(final Class<? extends Object> type, final Attribute attr,
+			final Localizer localizer) throws Exception
+	{
+		return PrimitiveConverter.conv(type, attr, localizer);
+	}
 
-  /**
-   * Adds a new class or interface to the dictionary of primitive providers.
-   * @param clazz <code>Class</code> providing primitive constants / public (final) fields
-   */
-  public static void addConstantProvider(final Class clazz) {
-    dictionaries.put( clazz.getSimpleName(), clazz );
-  }
+	/**
+	 * Converts String into java primitive type
+	 * @param attr <code>Attribute</code> value field needs to provide convertable String
+	 * @return <code>Object</code> primitive wrapped into wrapper object
+	 * @throws Exception
+	 */
+	public Object convert(final Attribute attr, final Localizer localizer) throws Exception
+	{
+		Class<?> type = null;
+		if (attr.getValue().matches("\\d+"))
+		{
+			try
+			{
+				Integer.parseInt(attr.getValue());
+				type = int.class;
+			}
+			catch (Exception e)
+			{
+				type = long.class;
+			}
+		}
+		else if (attr.getValue().matches("(\\d*\\.)?\\d+"))
+		{
+			try
+			{
+				Float.parseFloat(attr.getValue());
+				type = float.class;
+			}
+			catch (Exception e)
+			{
+				type = double.class;
+			}
+		}
+		else if (attr.getValue().equalsIgnoreCase("true") || attr.getValue().equalsIgnoreCase("false"))
+		{
+			type = boolean.class;
+		}
+		return PrimitiveConverter.conv(type, attr, localizer);
+	}
+
+	/**
+	 * A <code>Converters</code> conversTo method informs about the Class<?> type the converter
+	 * is returning when its <code>convert</code> method is called
+	 * @return <code>Class<?></code> - the Class<?> the converter is returning when its convert method is called
+	 */
+	public Class<Object> convertsTo()
+	{
+		return TEMPLATE;
+	}
+
+	/**
+	 * Adds a new class or interface to the dictionary of primitive providers.
+	 * @param clazz <code>Class<?></code> providing primitive constants / public (final) fields
+	 */
+	public static void addConstantProvider(final Class<?> clazz)
+	{
+		dictionaries.put(clazz.getSimpleName(), clazz);
+	}
 }

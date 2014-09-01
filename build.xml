@@ -1,4 +1,4 @@
-<!-- $Id: build.xml,v 1.9 2014/02/08 wolfpaulus Exp $ -->
+<!-- $Id: build.xml,v 1.9 2014/02/08 Tom Flucke Exp $ -->
 <!--
   For instructions on how to build Swixml, please view the README.txt file.
 -->
@@ -21,18 +21,18 @@
          -->
         <property file="../swixml.build.properties"/>
         <property file="${basedir}/build.properties"/>
-        <property name="java.docs" location="/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/docs"/>
+        <property name="java.docs" location="/Library/Java/JavaVirtualMachines/jdk1.8.0_20.jdk/Contents/Home/docs"/>
 
         <property name="Name" value="SWIXML"/>
         <property name="name" value="swixml"/>
         <property name="build.id" value="230"/>
-        <property name="version" value="2.3 (#${build.id})"/>
+        <property name="version" value="2.31 (#${build.id})"/>
         <property name="version.impl" value="${version}"/>
         <property name="version.spec" value="2.3"/>
         <property name="year" value="2014"/>
 
-        <property name="ant.build.javac.source" value="1.6"/>
-        <property name="ant.build.javac.target" value="1.6"/>
+        <property name="ant.build.javac.source" value="1.8"/>
+        <property name="ant.build.javac.target" value="1.8"/>
 
         <echo message="----------- ${Name} ${version} ------------"/>
 

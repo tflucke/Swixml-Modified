@@ -61,93 +61,118 @@ import java.awt.*;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
  */
-public class XGridBagConstraints extends GridBagConstraints {
+public class XGridBagConstraints extends GridBagConstraints
+{
 
-  public int getAnchor() {
-    return anchor;
-  }
+	private static final long serialVersionUID = -3913967818576057317L;
 
-  public void setAnchor(int anchor) {
-    this.anchor = anchor;
-  }
+	public int getAnchor()
+	{
+		return anchor;
+	}
 
-  public int getFill() {
-    return fill;
-  }
+	public void setAnchor(int anchor)
+	{
+		this.anchor = anchor;
+	}
 
-  public void setFill(int fill) {
-    this.fill = fill;
-  }
+	public int getFill()
+	{
+		return fill;
+	}
 
-  public int getGridheight() {
-    return gridheight;
-  }
+	public void setFill(int fill)
+	{
+		this.fill = fill;
+	}
 
-  public void setGridheight(int gridheight) {
-    this.gridheight = gridheight;
-  }
+	public int getGridheight()
+	{
+		return gridheight;
+	}
 
-  public int getGridwidth() {
-    return gridwidth;
-  }
+	public void setGridheight(int gridheight)
+	{
+		this.gridheight = gridheight;
+	}
 
-  public void setGridwidth(int gridwidth) {
-    this.gridwidth = gridwidth;
-  }
+	public int getGridwidth()
+	{
+		return gridwidth;
+	}
 
-  public int getGridx() {
-    return gridx;
-  }
+	public void setGridwidth(int gridwidth)
+	{
+		this.gridwidth = gridwidth;
+	}
 
-  public void setGridx(int gridx) {
-    this.gridx = gridx;
-  }
+	public int getGridx()
+	{
+		return gridx;
+	}
 
-  public int getGridy() {
-    return gridy;
-  }
+	public void setGridx(int gridx)
+	{
+		this.gridx = gridx;
+	}
 
-  public void setGridy(int gridy) {
-    this.gridy = gridy;
-  }
+	public int getGridy()
+	{
+		return gridy;
+	}
 
-  public Insets getInsets() {
-    return insets;
-  }
+	public void setGridy(int gridy)
+	{
+		this.gridy = gridy;
+	}
 
-  public void setInsets(Insets insets) {
-    this.insets = insets;
-  }
+	public Insets getInsets()
+	{
+		return insets;
+	}
 
-  public int getIpadx() {
-    return ipadx;
-  }
+	public void setInsets(Insets insets)
+	{
+		this.insets = insets;
+	}
 
-  public void setIpadx(int ipadx) {
-    this.ipadx = ipadx;
-  }
+	public int getIpadx()
+	{
+		return ipadx;
+	}
 
-  public int getIpady() {
-    return ipady;
-  }
+	public void setIpadx(int ipadx)
+	{
+		this.ipadx = ipadx;
+	}
 
-  public void setIpady(int ipady) {
-    this.ipady = ipady;
-  }
+	public int getIpady()
+	{
+		return ipady;
+	}
 
-  public double getWeightx() {
-    return weightx;
-  }
+	public void setIpady(int ipady)
+	{
+		this.ipady = ipady;
+	}
 
-  public void setWeightx(double weightx) {
-    this.weightx = weightx;
-  }
+	public double getWeightx()
+	{
+		return weightx;
+	}
 
-  public double getWeighty() {
-    return weighty;
-  }
+	public void setWeightx(double weightx)
+	{
+		this.weightx = weightx;
+	}
 
-  public void setWeighty(double weighty) {
-    this.weighty = weighty;
-  }
+	public double getWeighty()
+	{
+		return weighty;
+	}
+
+	public void setWeighty(double weighty)
+	{
+		this.weighty = weighty;
+	}
 }

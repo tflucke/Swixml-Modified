@@ -81,63 +81,77 @@ import java.util.StringTokenizer;
  * </ul>
  * </pre>
  */
-public class ColorConverter implements Converter {
-  /** converter's return type */
-  public static final Class TEMPLATE = Color.class;
+public class ColorConverter extends Converter<Color>
+{
+	/** converter's return type */
+	public static final Class<Color> TEMPLATE = Color.class;
 
-  /**
-    * Returns a <code>java.awt.Color</code> runtime object
-    * @param type <code>Class</code> not used
-    * @param attr <code>Attribute</code> value needs to provide a String
-    * @return runtime type is subclass of <code>java.awt.Color</code>
-    */
-  public Object convert( final Class type, final Attribute attr, Localizer localizer ) {
-    return ColorConverter.conv(type,attr);
-  }
-  /**
-   * Returns a <code>java.awt.Color</code> runtime object
-   * @param type <code>Class</code> not used
-   * @param attr <code>Attribute</code> value needs to provide a String
-   * @return runtime type is subclass of <code>java.awt.Color</code>
-   */
-  public static Object conv( final Class type, final Attribute attr ) {
-    if (attr != null) {
-      try {
-        Field field = Color.class.getField( attr.getValue() );
-        if (Color.class.equals( field.getType() ) && Modifier.isStatic( field.getModifiers() ))
-          return field.get( Color.class );
-      } catch (NoSuchFieldException e) {
-      } catch (SecurityException e) {
-      } catch (IllegalAccessException e) {
-      }
-      StringTokenizer st = new StringTokenizer( attr.getValue(), "," );
-      if (1 == st.countTokens()) {
-        try {
-          return new Color( Integer.parseInt( st.nextToken().trim(), 16 ) );
-        } catch (NumberFormatException e) {
-           if (SwingEngine.DEBUG_MODE) System.err.println( e );
-          return null;
-        }
-      }
-      int[] para = Util.ia( st );
-      if (4 <= para.length)
-        return new Color( para[0], para[1], para[2], para[3] );
-      if (3 <= para.length)
-        return new Color( para[0], para[1], para[2] );
-      if (1 <= para.length)
-        return new Color( para[0] );
-    }
-    return null;
-  }
+	/**
+	  * Returns a <code>java.awt.Color</code> runtime object
+	  * @param type <code>Class</code> not used
+	  * @param attr <code>Attribute</code> value needs to provide a String
+	  * @return runtime type is subclass of <code>java.awt.Color</code>
+	  */
+	public Color convert(final Attribute attr, Localizer localizer)
+	{
+		return ColorConverter.conv(attr);
+	}
 
+	/**
+	 * Returns a <code>java.awt.Color</code> runtime object
+	 * @param type <code>Class</code> not used
+	 * @param attr <code>Attribute</code> value needs to provide a String
+	 * @return runtime type is subclass of <code>java.awt.Color</code>
+	 */
+	public static Color conv(final Attribute attr)
+	{
+		if (attr != null)
+		{
+			try
+			{
+				Field field = Color.class.getField(attr.getValue());
+				if (Color.class.equals(field.getType()) && Modifier.isStatic(field.getModifiers()))
+					return (Color) field.get(Color.class);
+			}
+			catch (NoSuchFieldException e)
+			{}
+			catch (SecurityException e)
+			{}
+			catch (IllegalAccessException e)
+			{}
+			StringTokenizer st = new StringTokenizer(attr.getValue(), ",");
+			if (1 == st.countTokens())
+			{
+				try
+				{
+					return new Color(Integer.parseInt(st.nextToken().trim(), 16));
+				}
+				catch (NumberFormatException e)
+				{
+					if (SwingEngine.DEBUG_MODE)
+						System.err.println(e);
+					return null;
+				}
+			}
+			int[] para = Util.ia(st);
+			if (4 <= para.length)
+				return new Color(para[0], para[1], para[2], para[3]);
+			if (3 <= para.length)
+				return new Color(para[0], para[1], para[2]);
+			if (1 <= para.length)
+				return new Color(para[0]);
+		}
+		return null;
+	}
 
-  /**
-   * A <code>Converters</code> conversTo method informs about the Class type the converter
-   * is returning when its <code>convert</code> method is called
-   * @return <code>Class</code> - the Class the converter is returning when its convert method is called
-   */
-  public Class convertsTo() {
-    return TEMPLATE;
-  }
+	/**
+	 * A <code>Converters</code> conversTo method informs about the Class<?> type the converter
+	 * is returning when its <code>convert</code> method is called
+	 * @return <code>Class</code> - the Class<?> the converter is returning when its convert method is called
+	 */
+	public Class<Color> convertsTo()
+	{
+		return TEMPLATE;
+	}
 
 }

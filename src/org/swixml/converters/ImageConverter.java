@@ -57,7 +57,6 @@ import org.swixml.Attribute;
 import org.swixml.Converter;
 import org.swixml.Localizer;
 
-import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -68,40 +67,43 @@ import java.awt.*;
  * @see java.awt.Dimension
  * @see org.swixml.ConverterLibrary
  */
-public class ImageConverter implements Converter {
+public class ImageConverter extends Converter<Image>
+{
 
-  /** converter's return type */
-  public static final Class TEMPLATE = Image.class;
+	/** converter's return type */
+	public static final Class<Image> TEMPLATE = Image.class;
 
-  /**
-   * Converts a String into an ImageIcon through a Resource lookup
-   * @param type <code>Class</code> not used
-   * @param attr <code>Attribute</code> attribute provides the value to be converted
-   * @param localizer <code>Localizer</code> allow the use of resource lookups
-   * @return <code>Object</code> - an <code>ImageIcon</code>
-   */
-  public Object convert( final Class type, final Attribute attr, Localizer localizer ) {
-    return ImageConverter.conv( type, attr, localizer );
-  }
+	/**
+	 * Converts a String into an ImageIcon through a Resource lookup
+	 * @param type <code>Class</code> not used
+	 * @param attr <code>Attribute</code> attribute provides the value to be converted
+	 * @param localizer <code>Localizer</code> allow the use of resource lookups
+	 * @return <code>Object</code> - an <code>ImageIcon</code>
+	 */
+	public Image convert(final Attribute attr, Localizer localizer)
+	{
+		return ImageConverter.conv(attr, localizer);
+	}
 
-  /**
-   * Converts a String into an ImageIcon through a Resource lookup
-   * @param type <code>Class</code> not used
-   * @param attr <code>Attribute</code> attribute provides the value to be converted
-   * @param localizer <code>Localizer</code> allow the use of resource lookups
-   * @return <code>Object</code> - an <code>ImageIcon</code>
-   */
-  public static Object conv( final Class type, final Attribute attr, Localizer localizer ) {
-    ImageIcon icon = (ImageIcon) ImageIconConverter.conv( type, attr, localizer );
-    return icon != null ? icon.getImage() : null;
-  }
+	/**
+	 * Converts a String into an ImageIcon through a Resource lookup
+	 * @param type <code>Class</code> not used
+	 * @param attr <code>Attribute</code> attribute provides the value to be converted
+	 * @param localizer <code>Localizer</code> allow the use of resource lookups
+	 * @return <code>Object</code> - an <code>ImageIcon</code>
+	 */
+	public static Image conv(final Attribute attr, Localizer localizer)
+	{
+		return ImageIconConverter.conv(attr, localizer).getImage();
+	}
 
-  /**
-   * A <code>Converters</code> conversTo method informs about the Class type the converter
-   * is returning when its <code>convert</code> method is called
-   * @return <code>Class</code> - the Class the converter is returning when its convert method is called
-   */
-  public Class convertsTo() {
-    return TEMPLATE;
-  }
+	/**
+	 * A <code>Converters</code> conversTo method informs about the Class<?> type the converter
+	 * is returning when its <code>convert</code> method is called
+	 * @return <code>Class</code> - the Class<?> the converter is returning when its convert method is called
+	 */
+	public Class<Image> convertsTo()
+	{
+		return TEMPLATE;
+	}
 }

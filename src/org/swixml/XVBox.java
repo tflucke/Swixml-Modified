@@ -61,9 +61,13 @@ import javax.swing.*;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
  */
-public class XVBox extends Box {
+public class XVBox extends Box
+{
 
-  public XVBox() {
-    super( BoxLayout.Y_AXIS );
-  }
+	private static final long serialVersionUID = -6346497698578934314L;
+
+	public XVBox()
+	{
+		super(BoxLayout.Y_AXIS);
+	}
 }

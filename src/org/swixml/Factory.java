@@ -96,21 +96,21 @@ public interface Factory {
   Object newInstance(Object[] parameter) throws InstantiationException, IllegalAccessException, InvocationTargetException;
 
   /**
-   * @return class - <code>Class</code> the backing class template
+   * @return class - <code>Class<?></code> the backing class template
    */
-  Class getTemplate();
+  Class<?> getTemplate();
 
   /**
    * @return <code>Collection</code> - containing all available setter methods
    */
-  Collection getSetters();
+  Collection<?> getSetters();
 
   /**
    * Returns a setter method, which accepts a parameter of the given type
-   * @param template <code>Class</code> type of the setter method's parameter
+   * @param template <code>Class<?></code> type of the setter method's parameter
    * @return <code>Method</code> setter method which maybe invoked on an object of the template class
    */
-  Method getSetter( Class template );
+  Method getSetter( Class<?> template );
 
   /**
    * Returns a setter method by name<br>

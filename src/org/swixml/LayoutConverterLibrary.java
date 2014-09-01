@@ -83,7 +83,7 @@ public class LayoutConverterLibrary {
   /**
    * Returns all registered layout converters.
    */
-  public Map getLayoutConverters() {
+  public Map<?, ?> getLayoutConverters() {
     return layoutConverters;
   }
 
@@ -107,7 +107,7 @@ public class LayoutConverterLibrary {
    * @param layoutConverter Instance of LayoutConverter able to convert Strings
    *                        into layout managers or layout constraints.
    */
-  public void register( Class layoutClass, LayoutConverter layoutConverter ) {
+  public void register( Class<?> layoutClass, LayoutConverter layoutConverter ) {
     register(layoutClass.getName(), layoutConverter);
   }
 
@@ -125,10 +125,10 @@ public class LayoutConverterLibrary {
   /**
    * Returns a <code>LayoutConverter</code> instance, able to produce objects for
    * the given layout manager <code>class</code>.
-   * @param layoutClass Class of the object the <code>LayoutConverter</code> needs to produce.
+   * @param layoutClass Class<?> of the object the <code>LayoutConverter</code> needs to produce.
    * @return Instance of the LayoutConverter class.
    */
-  public LayoutConverter getLayoutConverter( Class layoutClass ) {
+  public LayoutConverter getLayoutConverter( Class<?> layoutClass ) {
     return layoutConverters.get( layoutClass.getName() );
   }
 

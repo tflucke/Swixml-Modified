@@ -60,24 +60,36 @@ import java.lang.reflect.InvocationTargetException;
  * @author <a href="mailto:wolf@wolfpaulus.com">Wolf Paulus</a>
  */
 
-public class XAction extends AbstractAction {
-  Method method;
-  Object client;
+public class XAction extends AbstractAction
+{
+	private static final long serialVersionUID = -8615210200349528985L;
 
-  public XAction(Object client, String methodName) throws NoSuchMethodException {
-    this.client= client;
-    if ( client!=null ){
-      method= client.getClass().getMethod(methodName);
-    }
+	Method method;
+	Object client;
 
-  }
-  public void actionPerformed(ActionEvent e) {
-    try {
-      this.method.invoke(client);
-    } catch (IllegalAccessException e1) {
-      e1.printStackTrace();
-    } catch (InvocationTargetException e1) {
-      e1.printStackTrace();
-    }
-  }
+	public XAction(Object client, String methodName) throws NoSuchMethodException
+	{
+		this.client = client;
+		if (client != null)
+		{
+			method = client.getClass().getMethod(methodName);
+		}
+
+	}
+
+	public void actionPerformed(ActionEvent e)
+	{
+		try
+		{
+			this.method.invoke(client);
+		}
+		catch (IllegalAccessException e1)
+		{
+			e1.printStackTrace();
+		}
+		catch (InvocationTargetException e1)
+		{
+			e1.printStackTrace();
+		}
+	}
 }

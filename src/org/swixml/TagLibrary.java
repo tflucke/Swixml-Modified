@@ -70,7 +70,7 @@ import java.util.Map;
  */
 public abstract class TagLibrary {
 
-  private Map tags = new HashMap();
+  private Map<String, Factory> tags = new HashMap<>();
 
   /**
    * Constructs a new TagLibrary and regisiters all factories.
@@ -90,7 +90,7 @@ public abstract class TagLibrary {
    * @param name <code>String</code> the tag's name
    * @param template <code>Class</code> the java class that represents the tag
    */
-  public void registerTag( String name, Class template ) {
+  public void registerTag( String name, Class<?> template ) {
     registerTag( name, new DefaultFactory( template ) );
   }
 
@@ -118,7 +118,7 @@ public abstract class TagLibrary {
    * @return <code>Map</code> - all registered tags.
    * <pre>Use athe tag names to get to the factories</pre>
    */
-  public Map getTagClasses() {
+  public Map<?, ?> getTagClasses() {
     return tags;
   }
 
@@ -136,9 +136,9 @@ public abstract class TagLibrary {
    * @param template <code>Class</code>
    * @return <code>Factory</code> - regsitered for the given tag name
    */
-  public Factory getFactory( Class template ) {
+  public Factory getFactory( Class<?> template ) {
     Factory factory = null;
-    Iterator it = tags.values().iterator();
+    Iterator<?> it = tags.values().iterator();
     while (it != null && it.hasNext()) {
       Factory f = (Factory) it.next();
       if (f.getTemplate().equals( template )) {
@@ -157,7 +157,7 @@ public abstract class TagLibrary {
    * @see #guessSetter(Class, String)
    * @see org.swixml.Factory#getSetter(String)
    */
-  protected Method getSetter( Class template, String name ) {
+  protected Method getSetter( Class<?> template, String name ) {
     Method method = null;
     Factory factory = getFactory( template.getName() );
     if (factory != null) {
@@ -174,7 +174,7 @@ public abstract class TagLibrary {
    * @see #getSetter(Class, String)
    * @see org.swixml.Factory#guessSetter(String)
    */
-  protected Method guessSetter( Class template, String name ) {
+  protected Method guessSetter( Class<?> template, String name ) {
     Method method = null;
     Factory factory = getFactory( template.getName() );
     if (factory != null) {

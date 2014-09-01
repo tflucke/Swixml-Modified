@@ -58,7 +58,6 @@ import org.swixml.Localizer;
 
 import javax.swing.*;
 
-
 /**
  * The ActionConverter is a tagging class that is only used to regsiter the Action.class
  * with the ConverterLibrary
@@ -67,25 +66,28 @@ import javax.swing.*;
  *
  * @since swixml 1.0
  */
-public class ActionConverter implements Converter {
-  /**
-   * Convert the value of the given <code>Attribute</code> object into an output object of the
-   * specified type.
-   *
-   * @param type <code>Class</code> Data type to which the Attribute's value should be converted
-   * @param attr <code>Attribute</code> the attribute, providing the value to be converted.
-   *
-   */
-  public Object convert( Class type, Attribute attr, Localizer localizer ) throws Exception {
-    return null;
-  }
+public class ActionConverter extends Converter<Action>
+{
+	/**
+	 * Convert the value of the given <code>Attribute</code> object into an output object of the
+	 * specified type.
+	 *
+	 * @param type <code>Class</code> Data type to which the Attribute's value should be converted
+	 * @param attr <code>Attribute</code> the attribute, providing the value to be converted.
+	 *
+	 */
+	public Action convert(Attribute attr, Localizer localizer)
+	{
+		return null;
+	}
 
-  /**
-   * A <code>conversTo</code> method informs about the Class type the converter
-   * is returning when its <code>convert</code> method is called
-   * @return <code>Class</code> - the Class the converter is returning when its convert method is called
-   */
-  public Class convertsTo() {
-    return Action.class;
-  }
+	/**
+	 * A <code>conversTo</code> method informs about the Class type the converter
+	 * is returning when its <code>convert</code> method is called
+	 * @return <code>Class</code> - the Class the converter is returning when its convert method is called
+	 */
+	public Class<Action> convertsTo()
+	{
+		return Action.class;
+	}
 }

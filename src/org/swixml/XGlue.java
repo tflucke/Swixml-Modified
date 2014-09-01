@@ -61,10 +61,13 @@ import java.awt.*;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
  */
-public class XGlue extends Box.Filler {
-  public XGlue() {
-    super( new Dimension( 0, 0 ), new Dimension( 0, 0 ), new Dimension( Short.MAX_VALUE, Short.MAX_VALUE ) );
-  }
+public class XGlue extends Box.Filler
+{
+	private static final long serialVersionUID = 5643904287609410375L;
+
+	public XGlue()
+	{
+		super(new Dimension(0, 0), new Dimension(0, 0), new Dimension(Short.MAX_VALUE,
+				Short.MAX_VALUE));
+	}
 }
-
-

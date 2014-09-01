@@ -61,9 +61,13 @@ import javax.swing.*;
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
  */
-public class XHBox extends Box {
+public class XHBox extends Box
+{
 
-  public XHBox() {
-    super( BoxLayout.X_AXIS );
-  }
+	private static final long serialVersionUID = -4640160664616145585L;
+
+	public XHBox()
+	{
+		super(BoxLayout.X_AXIS);
+	}
 }

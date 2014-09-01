@@ -128,7 +128,7 @@ public class SchemaGenerator {
    */
   private static Element addSwixmlTags(Document schema, Element root) {
     TagLibrary taglib = new SwingEngine().getTaglib();
-    for (Object name : new TreeSet(taglib.getTagClasses().keySet())) {
+    for (Object name : new TreeSet<Object>(taglib.getTagClasses().keySet())) {
       Element elem = schema.createElementNS(NAMESPACE_URI,"element");
       elem.setPrefix(NAMESPACE_PREFIX);
       elem.setAttribute("name", name.toString());

@@ -63,11 +63,15 @@ import javax.swing.*;
  * @version $Revision: 1.1 $
  */
 
-public class XSplitPane extends JSplitPane {
+public class XSplitPane extends JSplitPane
+{
 
-  public XSplitPane() {
-    super(JSplitPane.HORIZONTAL_SPLIT,null,null);
-    setTopComponent( null );
-    setBottomComponent( null );
-  }
+	private static final long serialVersionUID = -2815017707349201336L;
+
+	public XSplitPane()
+	{
+		super(JSplitPane.HORIZONTAL_SPLIT, null, null);
+		setTopComponent(null);
+		setBottomComponent(null);
+	}
 }

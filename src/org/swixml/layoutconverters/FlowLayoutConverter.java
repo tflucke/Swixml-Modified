@@ -129,7 +129,7 @@ public class FlowLayoutConverter implements LayoutConverter {
         //
         //  First FlowLayout parameter might be a pre-defined constant's name
         //
-        Object o = PrimitiveConverter.conv( null, new Attribute( "NA", st.nextToken() ), null );
+        Object o = PrimitiveConverter.conv(null, new Attribute( "NA", st.nextToken() ), null );
         int[] para = Util.ia( st );
         //
         //  Remaining paramters should be integer values
@@ -166,7 +166,7 @@ public class FlowLayoutConverter implements LayoutConverter {
     String value = Attribute.getAttributeValue(element,"alignment");
     if (value != null) {
       try {
-        Object o = PrimitiveConverter.conv( null, new Attribute( "NA", value ), null );
+        Object o = PrimitiveConverter.conv(null, new Attribute( "NA", value ), null );
         align = Integer.valueOf( o.toString() ).intValue();
       } catch (Exception ex) {
       }

@@ -64,7 +64,6 @@ import java.util.Map;
  * It remains in the responsibility of the main application that the registered
  * Action are available and fully funtional (loaded).
  */
-@SuppressWarnings("deprecation")
 public class MacApp extends Application {
   private static MacApp INSTANCE = null;
 
@@ -172,7 +171,7 @@ int sequence;
   }
 
 
-  public void update( Map action_map ) {
+  public void update( Map<?, ?> action_map ) {
 
     if (action_map.containsKey( Parser.ATTR_MACOS_ABOUT )) {
       aboutAction = (Action) action_map.get( Parser.ATTR_MACOS_ABOUT );

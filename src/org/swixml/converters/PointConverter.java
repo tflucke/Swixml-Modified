@@ -67,39 +67,44 @@ import java.util.StringTokenizer;
  * @see java.awt.Point
  * @see org.swixml.ConverterLibrary
  */
-public class PointConverter implements Converter {
-  /** converter's return type */
-  public static final Class TEMPLATE = Point.class;
+public class PointConverter extends Converter<Point>
+{
+	/** converter's return type */
+	public static final Class<Point> TEMPLATE = Point.class;
 
-  /**
-   * Converts a String into an Point object
-   * @param type <code>Class</code> not used
-   * @param attr <code>Attribute</code> value fields needs provides convertable String
-   * @return <code>Object</code> - runtime type is <code>Point</code>
-   */
-  public Object convert( final Class type, final Attribute attr, Localizer localizer ) {
-    if (attr != null) {
-      StringTokenizer st = new StringTokenizer( attr.getValue(), "," );
-      int x = 0;
-      int y = 0;
-      if (st.hasMoreTokens()) {
-        x = Integer.parseInt( st.nextToken().trim() );
-      }
-      if (st.hasMoreTokens()) {
-        y = Integer.parseInt( st.nextToken().trim() );
-      }
-      return new Point( x, y );
-    }
-    return null;
-  }
+	/**
+	 * Converts a String into an Point object
+	 * @param type <code>Class</code> not used
+	 * @param attr <code>Attribute</code> value fields needs provides convertable String
+	 * @return <code>Object</code> - runtime type is <code>Point</code>
+	 */
+	public Point convert(final Attribute attr, Localizer localizer)
+	{
+		if (attr != null)
+		{
+			StringTokenizer st = new StringTokenizer(attr.getValue(), ",");
+			int x = 0;
+			int y = 0;
+			if (st.hasMoreTokens())
+			{
+				x = Integer.parseInt(st.nextToken().trim());
+			}
+			if (st.hasMoreTokens())
+			{
+				y = Integer.parseInt(st.nextToken().trim());
+			}
+			return new Point(x, y);
+		}
+		return null;
+	}
 
-
-  /**
-   * A <code>Converters</code> conversTo method informs about the Class type the converter
-   * is returning when its <code>convert</code> method is called
-   * @return <code>Class</code> - the Class the converter is returning when its convert method is called
-   */
-  public Class convertsTo() {
-    return TEMPLATE;
-  }
+	/**
+	 * A <code>Converters</code> conversTo method informs about the Class<?> type the converter
+	 * is returning when its <code>convert</code> method is called
+	 * @return <code>Class</code> - the Class<?> the converter is returning when its convert method is called
+	 */
+	public Class<Point> convertsTo()
+	{
+		return TEMPLATE;
+	}
 }

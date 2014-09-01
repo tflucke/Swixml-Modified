@@ -63,53 +63,62 @@ import com.jgoodies.forms.factories.DefaultComponentFactory;
  * 
  * @author Karl Tauber
  */
-public class XTitledSeparator extends JComponent {
+public class XTitledSeparator extends JComponent
+{
 
-  private String text;
-  private int alignment = SwingConstants.LEFT;
+	private static final long serialVersionUID = 9175776683003666865L;
 
-  public XTitledSeparator() {
-    super();
-    setLayout(new BorderLayout());
-    update();
-  }
+	private String text;
+	private int alignment = SwingConstants.LEFT;
 
-  private void update() {
-    removeAll();
-    add( DefaultComponentFactory.getInstance().createSeparator(text, alignment));
-  }
+	public XTitledSeparator()
+	{
+		super();
+		setLayout(new BorderLayout());
+		update();
+	}
 
-  /**
-   * Returns the title of the separator.
-   */
-  public String getText() {
-    return text;
-  }
+	private void update()
+	{
+		removeAll();
+		add(DefaultComponentFactory.getInstance().createSeparator(text, alignment));
+	}
 
-  /**
-   * Sets the title of the separator.
-   */
-  public void setText( String text ) {
-    this.text = text;
-    update();
-  }
+	/**
+	 * Returns the title of the separator.
+	 */
+	public String getText()
+	{
+		return text;
+	}
 
-  /**
-   * Returns the title alignment.
-   * One of <code>SwingConstants.LEFT</code>, <code>SwingConstants.CENTER</code>
-   * or <code>SwingConstants.RIGHT</code>.
-   */
-  public int getAlignment() {
-    return alignment;
-  }
+	/**
+	 * Sets the title of the separator.
+	 */
+	public void setText(String text)
+	{
+		this.text = text;
+		update();
+	}
 
-  /**
-   * Sets the title alignment.
-   * One of <code>SwingConstants.LEFT</code>, <code>SwingConstants.CENTER</code>
-   * or <code>SwingConstants.RIGHT</code>.
-   */
-  public void setAlignment( int alignment ) {
-    this.alignment = alignment;
-    update();
-  }
+	/**
+	 * Returns the title alignment.
+	 * One of <code>SwingConstants.LEFT</code>, <code>SwingConstants.CENTER</code>
+	 * or <code>SwingConstants.RIGHT</code>.
+	 */
+	public int getAlignment()
+	{
+		return alignment;
+	}
+
+	/**
+	 * Sets the title alignment.
+	 * One of <code>SwingConstants.LEFT</code>, <code>SwingConstants.CENTER</code>
+	 * or <code>SwingConstants.RIGHT</code>.
+	 */
+	public void setAlignment(int alignment)
+	{
+		this.alignment = alignment;
+		update();
+	}
 }

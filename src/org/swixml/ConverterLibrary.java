@@ -57,7 +57,9 @@ import org.swixml.converters.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+
 import java.awt.*;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -92,102 +94,114 @@ import java.util.Map;
  * @version $Revision: 1.1 $
  * @see org.swixml.Converter
  */
-public class ConverterLibrary {
-  private static ConverterLibrary instance = new ConverterLibrary();
-  private Map<Class, Converter> converters = new HashMap<Class, Converter>();
+public class ConverterLibrary
+{
+	private static ConverterLibrary instance = new ConverterLibrary();
+	private Map<Class<?>, Converter<?>> converters = new HashMap<>();
 
-  /**
-   * The only available Ctor is private to make this a Singleton
-   */
-  private ConverterLibrary() {
-    registerConverters();
-  }
+	/**
+	 * The only available Ctor is private to make this a Singleton
+	 */
+	private ConverterLibrary()
+	{
+		registerConverters();
+	}
 
-  /**
-   * @return <code>ConverterLibrary</code> the single instacne of the ConverterLibrary.
-   */
-  public static synchronized ConverterLibrary getInstance() {
-    return instance;
-  }
+	/**
+	 * @return <code>ConverterLibrary</code> the single instacne of the ConverterLibrary.
+	 */
+	public static synchronized ConverterLibrary getInstance()
+	{
+		return instance;
+	}
 
-  /**
-   * @return <code>Map</code> - all registered converters.
-   *         <pre>Use a class to get to the converters</pre>
-   */
-  public Map getConverters() {
-    return converters;
-  }
+	/**
+	 * @return <code>Map<Class<?>, Converter></code> - all registered converters.
+	 *         <pre>Use a class to get to the converters</pre>
+	 */
+	public Map<Class<?>, Converter<?>> getConverters()
+	{
+		return converters;
+	}
 
-  /**
-   * Registers <code>Converters</code> with the ConverterLibrary.
-   */
-  private void registerConverters() {
-    register(Action.class, new ActionConverter());
-    register(Border.class, new BorderConverter());
-    register(Color.class, new ColorConverter());
-    register(Component.class, new ComponentConverter());
-    register(Dimension.class, new DimensionConverter());
-    register(Font.class, new FontConverter());
-    register(Image.class, new ImageConverter());
-    register(Icon.class, new ImageIconConverter());
-    register(ImageIcon.class, new ImageIconConverter());
-    register(Insets.class, new InsetsConverter());
-    register(KeyStroke.class, new KeyStrokeConverter());
-    register(Locale.class, new LocaleConverter());
-    register(Point.class, new PointConverter());
-    register(Rectangle.class, new RectangleConverter());
-    register(String.class, new StringConverter());
-    //
-    //  Register the PrimitiveConverter class for java primitive types
-    //
-    register(boolean.class, new PrimitiveConverter());
-    register(int.class, new PrimitiveConverter());
-    register(long.class, new PrimitiveConverter());
-    register(float.class, new PrimitiveConverter());
-    register(double.class, new PrimitiveConverter());
-  }
+	/**
+	 * Registers <code>Converters</code> with the ConverterLibrary.
+	 */
+	private void registerConverters()
+	{
+		register(Action.class, new ActionConverter());
+		register(Border.class, new BorderConverter());
+		register(Color.class, new ColorConverter());
+		register(Component.class, new ComponentConverter());
+		register(Dimension.class, new DimensionConverter());
+		register(Font.class, new FontConverter());
+		register(Image.class, new ImageConverter());
+		register(Icon.class, new ImageIconConverter());
+		register(ImageIcon.class, new ImageIconConverter());
+		register(Insets.class, new InsetsConverter());
+		register(KeyStroke.class, new KeyStrokeConverter());
+		register(Locale.class, new LocaleConverter());
+		register(Point.class, new PointConverter());
+		register(Rectangle.class, new RectangleConverter());
+		register(File.class, new FileConverter());
+		register(String.class, new StringConverter());
+		//
+		//  Register the PrimitiveConverter class for java primitive types
+		//
+		register(boolean.class, new PrimitiveConverter());
+		register(int.class, new PrimitiveConverter());
+		register(long.class, new PrimitiveConverter());
+		register(float.class, new PrimitiveConverter());
+		register(double.class, new PrimitiveConverter());
+	}
 
-  /**
-   * Registers a Converter with the ConverterLibrary
-   *
-   * @param converter <code>Converter</code> Instance of Converter able to convert Strings into objects of the given type
-   */
-  public void register(Converter converter) {
-    converters.put(converter.convertsTo(), converter);
-  }
+	/**
+	 * Registers a Converter with the ConverterLibrary
+	 *
+	 * @param converter <code>Converter</code> Instance of Converter able to convert Strings into objects of the given type
+	 */
+	public <U> void register(Converter<U> converter)
+	{
+		converters.put(converter.convertsTo(), converter);
+	}
 
-  /**
-   * Registers a Converter with the ConverterLibrary
-   *
-   * @param template  <code>Class</code> type of the objects the Converter creates
-   * @param converter <code>Converter</code> Instance of Converter able to convert Strings into objects of the given type
-   */
-  public void register(Class template, Converter converter) {
-    converters.put(template, converter);
-  }
+	/**
+	 * Registers a Converter with the ConverterLibrary
+	 *
+	 * @param template  <code>Class<?></code> type of the objects the Converter creates
+	 * @param converter <code>Converter</code> Instance of Converter able to convert Strings into objects of the given type
+	 */
+	public <U> void register(Class<? extends U> template, Converter<? extends U> converter)
+	{
+		converters.put(template, converter);
+	}
 
-  /**
-   * Indicates if a the ConverterLibary has a Converter producing instances of the given Class.
-   *
-   * @param template <code>Class</code>
-   * @return <code>boolean</code> true, if the ConverterLibrary has a Converter to produce an instances of the gioven class.
-   */
-  public boolean hasConverter(Class template) {
-    boolean found = converters.keySet().contains(template);
-    Iterator it = converters.values().iterator();
-    while (!found && it != null && it.hasNext()) {
-      found = template.isAssignableFrom(((Converter) it.next()).convertsTo());
-    }
-    return found;
-  }
+	/**
+	 * Indicates if a the ConverterLibary has a Converter producing instances of the given Class<?>.
+	 *
+	 * @param template <code>Class<?></code>
+	 * @return <code>boolean</code> true, if the ConverterLibrary has a Converter to produce an instances of the gioven class.
+	 */
+	public <U> boolean hasConverter(Class<U> template)
+	{
+		boolean found = converters.keySet().contains(template);
+		Iterator<?> it = converters.values().iterator();
+		while (!found && it != null && it.hasNext())
+		{
+			found = template.isAssignableFrom(((Converter<?>) it.next()).convertsTo());
+		}
+		return found;
+	}
 
-  /**
-   * Returns a <code>Converter</code> instance, able to produce objects of the given <code>class</code>
-   *
-   * @param template <code>Class</code> Class of the object the <code>Converter</code> needs to produce.
-   * @return <code>Converter</code> - instance of the given Converter class.
-   */
-  public Converter getConverter(Class template) {
-    return converters.get(template);
-  }
+	/**
+	 * Returns a <code>Converter</code> instance, able to produce objects of the given <code>class</code>
+	 *
+	 * @param template <code>Class<?></code> Class<?> of the object the <code>Converter</code> needs to produce.
+	 * @return <code>Converter</code> - instance of the given Converter class.
+	 */
+	@SuppressWarnings("unchecked")
+	public <U> Converter<U> getConverter(Class<U> template)
+	{
+		return (Converter<U>) converters.get(template);
+	}
 }

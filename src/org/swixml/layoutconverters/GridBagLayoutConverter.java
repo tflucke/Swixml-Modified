@@ -132,7 +132,7 @@ public class GridBagLayoutConverter implements LayoutConverter {
         String fieldname = st.nextToken();
         Field field = GridBagLayout.class.getField( fieldname );
         if (field != null) {
-          Class fieldtype = field.getType();
+          Class<?> fieldtype = field.getType();
 
           if (int[].class.equals( fieldtype )) {
             field.set( lm, Util.ia( st ) );
