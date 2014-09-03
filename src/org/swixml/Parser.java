@@ -208,7 +208,7 @@ public class Parser
 	/**
 	 * map to store id-id components, needed to support labelFor attributes
 	 */
-	private Map<Object, String> lbl_map = new HashMap<>();
+	private Map<JLabel, String> lbl_map = new HashMap<>();
 
 	/**
 	 * map to store specific Mac OS actions mapping
@@ -242,6 +242,25 @@ public class Parser
 		LOCALIZED_ATTRIBUTES.add("titles");
 		LOCALIZED_ATTRIBUTES.add("tooltiptext");
 		LOCALIZED_ATTRIBUTES.add("tooltiptexts");
+	}
+
+	/**
+	   * Retrieve all atributes into list.
+	   * 
+	   * @param elem
+	   *            element for extract attributes
+	   * @return attributes list
+	   */
+	public static List<Attribute> getAttributes(Element elem)
+	{
+		NamedNodeMap map = elem.getAttributes();
+		List<Attribute> result = new ArrayList<Attribute>(map.getLength());
+		for (int i = 0; i < map.getLength(); i++)
+		{
+			Node a = map.item(i);
+			result.add(new Attribute(a.getNodeName(), a.getNodeValue()));
+		}
+		return result;
 	}
 
 	/**
@@ -362,10 +381,10 @@ public class Parser
 	 */
 	private void linkLabels()
 	{
-		Iterator<?> it = lbl_map.keySet().iterator();
+		Iterator<JLabel> it = lbl_map.keySet().iterator();
 		while (it != null && it.hasNext())
 		{
-			JLabel lbl = (JLabel) it.next();
+			JLabel lbl = it.next();
 			String id = lbl_map.get(lbl).toString();
 			try
 			{
@@ -406,7 +425,6 @@ public class Parser
 	 */
 	Object getSwing(Element element, Object obj) throws Exception
 	{
-
 		Factory factory = engine.getTaglib().getFactory(element.getNodeName());
 		//  look for <id> attribute value
 		String id = Attribute.getAttributeValue(element, Parser.ATTR_ID) != null ? Attribute
@@ -461,15 +479,38 @@ public class Parser
 			cloneAttributes(element);
 			element.removeAttribute(Parser.ATTR_USE);
 		}
+
+		List<Attribute> attributes = getAttributes(element);
+
+		//
+		//  1st attempt to apply attributes (call setters on the objects)
+		//    put an action attribute at the beginning of the attribute list
+		Attribute actionAttr = Attribute.getAttribute(element, "Action");
+		if (actionAttr != null)
+		{
+			element.removeAttribute(actionAttr.getName());
+			attributes.add(0, actionAttr);
+		}
+		
+		//
+		//  put Tag's Text content into Text Attribute
+		//
+		if (Attribute.getAttributeValue(element, "Text") == null)
+		{
+			String v = element.getTextContent();
+			if (v != null && v.trim().length() > 0 && element.getChildNodes().getLength() == 1)
+				attributes.add(new Attribute("Text", v.trim()));
+		}
+		
+		LayoutManager lm = getLayoutManager(element, attributes);
+		
+
 		//
 		//  let the factory instantiate a new object
 		//
-
-		List<Attribute> attributes = getAttributes(element);
 		if (obj == null)
 		{
 			Object initParameter = null;
-
 			if (Attribute.getAttributeValue(element, Parser.ATTR_INITCLASS) != null)
 			{
 				StringTokenizer st = new StringTokenizer(Attribute.getAttributeValue(element,
@@ -482,7 +523,7 @@ public class Parser
 					{
 						Class<?> initClass = Class.forName(st.nextToken()); // load update type
 						try
-						{ // look for a getInstance() methode
+						{ // look for a getInstance() method
 							Method factoryMethod = initClass.getMethod(Parser.GETINSTANCE);
 							if (Modifier.isStatic(factoryMethod.getModifiers()))
 							{
@@ -531,7 +572,8 @@ public class Parser
 							{
 								Attribute attrib = (Attribute) attributes.get(i);
 								String attribName = attrib.getName();
-								if (attribName != null && attribName.startsWith(ATTR_MACOS_PREFIX))
+								if (attribName != null
+										&& attribName.startsWith(Parser.ATTR_MACOS_PREFIX))
 								{
 									mac_map.put(attribName, initParameter);
 								}
@@ -580,8 +622,8 @@ public class Parser
 				}
 			}
 
-			obj = initParameter != null ? factory.newInstance(new Object[] {initParameter})
-					: factory.newInstance();
+			obj = factory.newInstance(element, this, initParameter);
+
 			constructed = true;
 			//
 			//  put newly created object in the map if it has an <id> attribute (uniqueness is given att this point)
@@ -597,76 +639,12 @@ public class Parser
 		//
 		if (obj instanceof Container)
 		{
-			LayoutManager lm = null;
-			Element layoutElement = getChildByName(element, "layout");
-			if (layoutElement != null)
-			{
-				element.removeChild(layoutElement);
-
-				String layoutType = Attribute.getAttributeValue(layoutElement, "type");
-				LayoutConverter layoutConverter = LayoutConverterLibrary.getInstance()
-						.getLayoutConverterByID(layoutType);
-				if (layoutConverter != null)
-				{
-					lm = layoutConverter.convertLayoutElement(layoutElement);
-				}
-			}
-
-			if (lm == null)
-			{
-				// search for case-insensitive "layout" attribute to ensure compatibiliity
-				Attribute layoutAttr = null;
-				for (int i = 0; i < attributes.size(); i++)
-				{
-					Attribute attr = (Attribute) attributes.get(i);
-					if ("layout".equalsIgnoreCase(attr.getName()))
-					{
-						attributes.remove(i);
-						layoutAttr = attr;
-						break;
-					}
-				}
-
-				if (layoutAttr != null)
-				{
-					element.removeAttribute(layoutAttr.getName());
-
-					String layoutType = layoutAttr.getValue();
-					int index = layoutType.indexOf('(');
-					if (index > 0)
-						layoutType = layoutType.substring(0, index); // strip parameters
-					LayoutConverter layoutConverter = LayoutConverterLibrary.getInstance()
-							.getLayoutConverterByID(layoutType);
-					if (layoutConverter != null)
-					{
-						lm = layoutConverter.convertLayoutAttribute(layoutAttr);
-					}
-				}
-			}
-
 			if (lm != null)
 				((Container) obj).setLayout(lm);
 		}
 
-		//
-		//  1st attempt to apply attributes (call setters on the objects)
-		//    put an action attribute at the beginning of the attribute list
-		Attribute actionAttr = Attribute.getAttribute(element, "Action");
-		if (actionAttr != null)
-		{
-			element.removeAttribute(actionAttr.getName());
-			attributes.add(0, actionAttr);
-		}
-		//
-		//  put Tag's Text content into Text Attribute
-		//
-		if (Attribute.getAttributeValue(element, "Text") == null)
-		{
-			String v = element.getTextContent();
-			if (v != null && v.trim().length() > 0 && element.getChildNodes().getLength() == 1)
-				attributes.add(new Attribute("Text", v.trim()));
-		}
 		List<Attribute> remainingAttrs = applyAttributes(obj, factory, attributes);
+		
 		//
 		//  process child tags
 		//
@@ -794,25 +772,6 @@ public class Parser
 	}
 
 	/**
-	   * Retrieve all atributes into list.
-	   * 
-	   * @param elem
-	   *            element for extract attributes
-	   * @return attributes list
-	   */
-	protected List<Attribute> getAttributes(Element elem)
-	{
-		NamedNodeMap map = elem.getAttributes();
-		List<Attribute> result = new ArrayList<Attribute>(map.getLength());
-		for (int i = 0; i < map.getLength(); i++)
-		{
-			Node a = map.item(i);
-			result.add(new Attribute(a.getNodeName(), a.getNodeValue()));
-		}
-		return result;
-	}
-
-	/**
 	 * Creates an object and sets properties based on the XML tag's attributes
 	 *
 	 * @param obj        <code>Object</code> object representing a tag found in the SWIXML descriptor document
@@ -877,13 +836,6 @@ public class Parser
 			if (action != null && attr.getName().startsWith(Parser.ATTR_MACOS_PREFIX))
 			{
 				mac_map.put(attr.getName(), action);
-				continue;
-			}
-
-			if (JLabel.class.isAssignableFrom(obj.getClass())
-					&& attr.getName().equalsIgnoreCase("LabelFor"))
-			{
-				lbl_map.put(obj, attr.getValue());
 				continue;
 			}
 
@@ -1063,6 +1015,57 @@ public class Parser
 			}
 		} // end_while
 		return list;
+	}
+
+	private LayoutManager getLayoutManager(Element element, List<Attribute> attributes)
+	{
+		LayoutManager lm = null;
+		Element layoutElement = getChildByName(element, "layout");
+		if (layoutElement != null)
+		{
+			element.removeChild(layoutElement);
+
+			String layoutType = Attribute.getAttributeValue(layoutElement, "type");
+			LayoutConverter layoutConverter = LayoutConverterLibrary.getInstance()
+					.getLayoutConverterByID(layoutType);
+			if (layoutConverter != null)
+			{
+				lm = layoutConverter.convertLayoutElement(layoutElement);
+			}
+		}
+
+		if (lm == null)
+		{
+			// search for case-insensitive "layout" attribute to ensure compatibiliity
+			Attribute layoutAttr = null;
+			for (int i = 0; i < attributes.size(); i++)
+			{
+				Attribute attr = (Attribute) attributes.get(i);
+				if ("layout".equalsIgnoreCase(attr.getName()))
+				{
+					attributes.remove(i);
+					layoutAttr = attr;
+					break;
+				}
+			}
+
+			if (layoutAttr != null)
+			{
+				element.removeAttribute(layoutAttr.getName());
+
+				String layoutType = layoutAttr.getValue();
+				int index = layoutType.indexOf('(');
+				if (index > 0)
+					layoutType = layoutType.substring(0, index); // strip parameters
+				LayoutConverter layoutConverter = LayoutConverterLibrary.getInstance()
+						.getLayoutConverterByID(layoutType);
+				if (layoutConverter != null)
+				{
+					lm = layoutConverter.convertLayoutAttribute(layoutAttr);
+				}
+			}
+		}
+		return lm;
 	}
 
 	/**
@@ -1336,5 +1339,10 @@ public class Parser
 			}
 		}
 		return null;
+	}
+
+	public void setLabel(JLabel result, String value)
+	{
+		lbl_map.put(result, value);
 	}
 }

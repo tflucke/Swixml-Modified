@@ -176,10 +176,10 @@ public class SchemaGenerator {
       e.setPrefix(NAMESPACE_PREFIX);
       Method m = (Method) obj;
       String s = m.getName();
-      if (s.startsWith(Factory.SETTER_ID))
-        s = s.substring(Factory.SETTER_ID.length()).toLowerCase();
-      if (s.startsWith(Factory.ADDER_ID))
-        s = s.substring(Factory.ADDER_ID.length()).toLowerCase();
+      if (s.startsWith(DefaultFactory.SETTER_ID))
+        s = s.substring(DefaultFactory.SETTER_ID.length()).toLowerCase();
+      if (s.startsWith(DefaultFactory.ADDER_ID))
+        s = s.substring(DefaultFactory.ADDER_ID.length()).toLowerCase();
       boolean b = boolean.class.equals(m.getParameterTypes()[0]);
       if (!set.contains(s)) {
         e.setAttribute("name", s);

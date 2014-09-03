@@ -55,6 +55,9 @@ package org.swixml;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+
 /**
  * The SwingTagLibrary contains Factories for all Swing Objects that can be instatiated by
  * parsing an XML descriptor at runtime.
@@ -66,70 +69,88 @@ import javax.swing.table.JTableHeader;
  * @see org.swixml.TagLibrary
 
  */
-public final class SwingTagLibrary extends TagLibrary {
+public final class SwingTagLibrary extends TagLibrary
+{
 
-  private static SwingTagLibrary INSTANCE = new SwingTagLibrary();
-  public static SwingTagLibrary getInstance() {
-    return SwingTagLibrary.INSTANCE;
-  }
+	private static SwingTagLibrary INSTANCE = new SwingTagLibrary();
 
-  /**
-   * Constructs a Swing Library by registering swings widgets
-   */
-  private SwingTagLibrary() {
-    registerTags();
-  }
+	public static SwingTagLibrary getInstance()
+	{
+		return SwingTagLibrary.INSTANCE;
+	}
 
-  /**
-   * Registers the tags this TagLibrary is all about.
-   * Strategy method called by the super class, allowing
-   * derived classes to change the registration behaviour.
-   */
-  protected void registerTags() {
-    registerTag( "Applet", JApplet.class );
-    registerTag( "Button", JButton.class );
-    registerTag( "ButtonGroup", ButtonGroup.class );
-    registerTag( "HBox", XHBox.class );
-    registerTag( "VBox", XVBox.class );
-    registerTag( "Checkbox", JCheckBox.class );
-    registerTag( "CheckBoxMenuItem", JCheckBoxMenuItem.class );
-    registerTag( "ComboBox", JComboBox.class );
-    registerTag( "Component", JComponent.class );
-    registerTag( "DesktopPane", JDesktopPane.class );
-    registerTag( "Dialog", XDialog.class );
-    registerTag( "EditorPane", JEditorPane.class );
-    registerTag( "FormattedTextField", JFormattedTextField.class );
-    registerTag( "Frame",JFrame.class);
-    registerTag( "Glue", XGlue.class );
-    registerTag( "GridBagConstraints", XGridBagConstraints.class );
-    registerTag( "InternalFrame", JInternalFrame.class );
-    registerTag( "Label", JLabel.class );
-    registerTag( "List", JList.class );
-    registerTag( "Menu", JMenu.class );
-    registerTag( "Menubar", JMenuBar.class );
-    registerTag( "Menuitem", JMenuItem.class );
-    registerTag( "Panel", JPanel.class );
-    registerTag( "PasswordField", JPasswordField.class );
-    registerTag( "PopupMenu", JPopupMenu.class );
-    registerTag( "ProgressBar", JProgressBar.class );
-    registerTag( "RadioButton", JRadioButton.class );
-    registerTag( "RadioButtonMenuItem", JRadioButtonMenuItem.class );
-    registerTag( "OptionPane", JOptionPane.class );
-    registerTag( "ScrollPane", XScrollPane.class );
-    registerTag( "Separator", JSeparator.class );
-    registerTag( "Slider", JSlider.class );
-    registerTag( "Spinner", JSpinner.class );
-    registerTag( "SplitPane", XSplitPane.class );
-    registerTag( "TabbedPane", XTabbedPane.class );
-    registerTag( "Table", JTable.class );
-    registerTag( "TableHeader", JTableHeader.class );
-    registerTag( "TextArea", JTextArea.class );
-    registerTag( "TextField", JTextField.class );
-    registerTag( "TextPane", JTextPane.class );
-    registerTag( "TitledSeparator", XTitledSeparator.class );
-    registerTag( "ToggleButton", JToggleButton.class );
-    registerTag( "Tree", JTree.class );
-    registerTag( "Toolbar", JToolBar.class );
-  }
+	/**
+	 * Constructs a Swing Library by registering swings widgets
+	 */
+	private SwingTagLibrary()
+	{
+		registerTags();
+	}
+
+	/**
+	 * Registers the tags this TagLibrary is all about.
+	 * Strategy method called by the super class, allowing
+	 * derived classes to change the registration behaviour.
+	 */
+	protected void registerTags()
+	{
+		registerTag("Applet", JApplet.class);
+		registerTag("Button", JButton.class);
+		registerTag("ButtonGroup", ButtonGroup.class);
+		registerTag("HBox", XHBox.class);
+		registerTag("VBox", XVBox.class);
+		registerTag("Checkbox", JCheckBox.class);
+		registerTag("CheckBoxMenuItem", JCheckBoxMenuItem.class);
+		registerTag("ComboBox", JComboBox.class);
+		registerTag("Component", JComponent.class);
+		registerTag("DesktopPane", JDesktopPane.class);
+		registerTag("Dialog", XDialog.class);
+		registerTag("EditorPane", JEditorPane.class);
+		registerTag("FormattedTextField", JFormattedTextField.class);
+		registerTag("Frame", JFrame.class);
+		registerTag("Glue", XGlue.class);
+		registerTag("GridBagConstraints", XGridBagConstraints.class);
+		registerTag("InternalFrame", JInternalFrame.class);
+		registerTag("Label", new DefaultFactory(JLabel.class)
+		{
+			@Override
+			public Object newInstance(Element element, Parser parser, Object initParameter) throws Exception
+			{
+				Object result = super.newInstance(element, parser, initParameter);
+				NamedNodeMap attrs = element.getAttributes();
+				for (int i = 0; i < attrs.getLength(); i++)
+				if (((Attribute) attrs.item(i)).getName().equalsIgnoreCase("LabelFor"))
+				{
+					parser.setLabel((JLabel) result, ((Attribute) attrs.item(i)).getValue());
+				}
+				return result;
+			}
+		});
+		registerTag("List", JList.class);
+		registerTag("Menu", JMenu.class);
+		registerTag("Menubar", JMenuBar.class);
+		registerTag("Menuitem", JMenuItem.class);
+		registerTag("Panel", JPanel.class);
+		registerTag("PasswordField", JPasswordField.class);
+		registerTag("PopupMenu", JPopupMenu.class);
+		registerTag("ProgressBar", JProgressBar.class);
+		registerTag("RadioButton", JRadioButton.class);
+		registerTag("RadioButtonMenuItem", JRadioButtonMenuItem.class);
+		registerTag("OptionPane", JOptionPane.class);
+		registerTag("ScrollPane", XScrollPane.class);
+		registerTag("Separator", JSeparator.class);
+		registerTag("Slider", JSlider.class);
+		registerTag("Spinner", JSpinner.class);
+		registerTag("SplitPane", XSplitPane.class);
+		registerTag("TabbedPane", XTabbedPane.class);
+		registerTag("Table", JTable.class);
+		registerTag("TableHeader", JTableHeader.class);
+		registerTag("TextArea", JTextArea.class);
+		registerTag("TextField", JTextField.class);
+		registerTag("TextPane", JTextPane.class);
+		registerTag("TitledSeparator", XTitledSeparator.class);
+		registerTag("ToggleButton", JToggleButton.class);
+		registerTag("Tree", JTree.class);
+		registerTag("Toolbar", JToolBar.class);
+	}
 }
-

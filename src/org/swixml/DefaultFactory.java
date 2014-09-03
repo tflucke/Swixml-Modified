@@ -59,6 +59,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
+import org.w3c.dom.Element;
+
 /**
  * The <code>DefaultFactory</code> is a default implementation of the <code>Factory</code> Interface.
  * <p>The DefaultFactory registers all setter methods that take a
@@ -66,15 +68,19 @@ import java.util.*;
  *
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
+ * @param <T>
  */
-public final class DefaultFactory implements Factory
+public class DefaultFactory<T> implements Factory<T>
 {
+	/** Specifies the prefix string for all setter methods */
+	static final String SETTER_ID = "set";
+	static final String ADDER_ID = "add";
 
 	/** Collection for all setter methods */
 	private final Collection<Method> setters = new ArrayList<Method>();
 
 	/** The factory creates instances of this Class<?> */
-	private final Class<?> template;
+	private final Class<T> template;
 
 	/** Priority to resolve method name clashes */
 	protected Class<?>[] parameterPriority = {String.class, float.class, double.class,
@@ -89,7 +95,7 @@ public final class DefaultFactory implements Factory
 	 * Moreover, to be regsitered, a Converter needs to be available in the ConverterLibrary that can create
 	 * instances of the paramter type.</p>
 	 */
-	public DefaultFactory(Class<?> template)
+	public DefaultFactory(Class<T> template)
 	{
 		this.template = template;
 		//
@@ -132,7 +138,7 @@ public final class DefaultFactory implements Factory
 		for (int i = 0; i < methods.length; i++)
 		{
 			String methodeName = methods[i].getName();
-			if (methodeName.startsWith(Factory.SETTER_ID))
+			if (methodeName.startsWith(SETTER_ID))
 			{
 				if (methods[i].getParameterTypes().length == 1)
 				{
@@ -190,15 +196,16 @@ public final class DefaultFactory implements Factory
 	 * @throws IllegalAccessException 
 	 * @throws Exception
 	 */
-	public Object newInstance() throws Exception
+	@SuppressWarnings("unchecked")
+	public T newInstance() throws Exception
 	{
 		try
 		{
-			return template.newInstance();
+			return (T) template.newInstance();
 		}
 		catch (Exception e)
 		{
-			return template.getMethod("getInstance").invoke(null);
+			return (T) template.getMethod("getInstance").invoke(null);
 		}
 	}
 
@@ -210,7 +217,8 @@ public final class DefaultFactory implements Factory
 	 * @return instance <code>Object</code> a new instance of a template class
 	 * @throws Exception
 	 */
-	public Object newInstance(Object parameter) throws Exception
+	@SuppressWarnings("unchecked")
+	public T newInstance(Object parameter) throws Exception
 	{
 		Class<?> pType = parameter.getClass(); // get runtime class of the parameter
 		Constructor<?>[] ctors = template.getConstructors();
@@ -219,13 +227,13 @@ public final class DefaultFactory implements Factory
 			Class<?>[] paraTypes = ctors[i].getParameterTypes();
 			if (0 < paraTypes.length && paraTypes[0].isAssignableFrom(pType))
 			{
-				return ctors[i].newInstance(new Object[] {parameter});
+				return (T) ctors[i].newInstance(new Object[] {parameter});
 			}
 		}
 		Method instanceMethod = template.getMethod("getInstance", pType);
 		if (Modifier.isStatic(instanceMethod.getModifiers()))
 		{
-			return instanceMethod.invoke(null, parameter);
+			return (T) instanceMethod.invoke(null, parameter);
 		}
 		return newInstance();
 	}
@@ -243,7 +251,8 @@ public final class DefaultFactory implements Factory
 	 * idea suggested by Frank Meissner <f.meissner@web.de>
 	 *
 	 */
-	public Object newInstance(Object[] parameter) throws InstantiationException,
+	@SuppressWarnings("unchecked")
+	public T newInstance(Object[] parameter) throws InstantiationException,
 			IllegalAccessException, InvocationTargetException
 	{
 		if (parameter != null)
@@ -295,7 +304,7 @@ public final class DefaultFactory implements Factory
 			//
 			if (ctor != null)
 			{
-				return ctor.newInstance(parameter);
+				return (T) ctor.newInstance(parameter);
 			}
 			else
 			{ // no matching constructor was found
@@ -304,7 +313,7 @@ public final class DefaultFactory implements Factory
 					Method instanceMethod = template.getMethod("getInstance", pTypes);
 					if (Modifier.isStatic(instanceMethod.getModifiers()))
 					{
-						return instanceMethod.invoke(null, parameter);
+						return (T) instanceMethod.invoke(null, parameter);
 					}
 				}
 				catch (Exception e)
@@ -320,7 +329,7 @@ public final class DefaultFactory implements Factory
 	/**
 	 * @return class - <code>Class<?></code> the backing class template
 	 */
-	public Class<?> getTemplate()
+	public Class<T> getTemplate()
 	{
 		return template;
 	}
@@ -328,7 +337,8 @@ public final class DefaultFactory implements Factory
 	/**
 	 * @return <code>Collection</code> containing all available setter methods
 	 */
-	public Collection<?> getSetters()
+	@Override
+	public Collection<Method> getSetters()
 	{
 		return setters;
 	}
@@ -400,7 +410,7 @@ public final class DefaultFactory implements Factory
 
 		Method method = null;
 		Iterator<?> it = setters.iterator();
-		name = (Factory.SETTER_ID + name).toLowerCase();
+		name = (SETTER_ID + name).toLowerCase();
 		while (it != null && it.hasNext())
 		{
 			Method m = (Method) it.next();
@@ -420,5 +430,11 @@ public final class DefaultFactory implements Factory
 	public void removeSetter(Method method)
 	{
 		setters.remove(method);
+	}
+
+	@Override
+	public T newInstance(Element element, Parser parser, Object initParameter) throws Exception
+	{
+		return initParameter != null ? newInstance(new Object[] {initParameter}) : newInstance();
 	}
 }

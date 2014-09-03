@@ -53,7 +53,6 @@
 
 package org.swixml;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -147,40 +146,6 @@ public abstract class TagLibrary {
       }
     }
     return factory;
-  }
-
-  /**
-   * Returns a setter method by name for a specified template class
-   * @param template <code>Class</code> template class
-   * @param name <code>Sting</code> method name
-   * @return <code>Method</code> - a setter method for the given class.
-   * @see #guessSetter(Class, String)
-   * @see org.swixml.Factory#getSetter(String)
-   */
-  protected Method getSetter( Class<?> template, String name ) {
-    Method method = null;
-    Factory factory = getFactory( template.getName() );
-    if (factory != null) {
-      method = factory.getSetter( name );
-    }
-    return method;
-  }
-
-  /**
-   * Returns a setter method by name for a specified template class
-   * @param template <code>Class</code> template class
-   * @param name <code>Sting</code> attribute name
-   * @return <code>Method</code> - a setter method for the given class, able to modify the property.
-   * @see #getSetter(Class, String)
-   * @see org.swixml.Factory#guessSetter(String)
-   */
-  protected Method guessSetter( Class<?> template, String name ) {
-    Method method = null;
-    Factory factory = getFactory( template.getName() );
-    if (factory != null) {
-      method = factory.guessSetter( name );
-    }
-    return method;
   }
 
 }
