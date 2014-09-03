@@ -143,7 +143,7 @@ public class SwingEngine
 	/** display the swing release version to system out. */
 	static
 	{
-		System.out.println("SwixML Custum");
+		System.out.println("SwixML Custom");
 		try
 		{
 			MAC_OSX = System.getProperty("os.name").toLowerCase()
