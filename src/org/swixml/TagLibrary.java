@@ -67,85 +67,96 @@ import java.util.Map;
  * @version $Revision: 1.1 $
 
  */
-public abstract class TagLibrary {
+public abstract class TagLibrary
+{
 
-  private Map<String, Factory> tags = new HashMap<>();
+	private Map<String, Factory<?>> tags = new HashMap<>();
 
-  /**
-   * Constructs a new TagLibrary and regisiters all factories.
-   */
-  public TagLibrary() {
-    registerTags();
-  }
+	/**
+	 * Constructs a new TagLibrary and regisiters all factories.
+	 */
+	public TagLibrary()
+	{
+		registerTags();
+	}
 
-  /**
-   * Registers all factories for the TagLibrary.
-   */
-  abstract protected void registerTags();
+	/**
+	 * Registers all factories for the TagLibrary.
+	 */
+	abstract protected void registerTags();
 
-  /**
-   * Registers a class for the given tag name
-   *
-   * @param name <code>String</code> the tag's name
-   * @param template <code>Class</code> the java class that represents the tag
-   */
-  public void registerTag( String name, Class<?> template ) {
-    registerTag( name, new DefaultFactory( template ) );
-  }
+	/**
+	 * Registers a class for the given tag name
+	 *
+	 * @param name <code>String</code> the tag's name
+	 * @param template <code>Class</code> the java class that represents the tag
+	 */
+	public<T> void registerTag(String name, Class<T> template)
+	{
+		registerTag(name, new DefaultFactory<T>(template));
+	}
 
-  /**
-   * Registers a factory for the given tag name
-   *
-   * @param name <code>String</code> the tag's name
-   * @param factory <code>FactoryFactory</code> factory to create an Instance of the tag
-   */
-  public void registerTag( String name, Factory factory ) {
-    tags.put( name.toLowerCase(), factory );
-  }
+	/**
+	 * Registers a factory for the given tag name
+	 *
+	 * @param name <code>String</code> the tag's name
+	 * @param factory <code>FactoryFactory</code> factory to create an Instance of the tag
+	 */
+	public void registerTag(String name, Factory<?> factory)
+	{
+		tags.put(name.toLowerCase(), factory);
+	}
 
-  /**
-   * Un-registers (removes) a registered tag.
-   *
-   * @param name <code>String</code> the tag's name
-   * @return <code>boolean</code> true if tag was registered befoire and now successfuly removed.
-   */
-  public boolean unregisterTag( String name ) {
-    return (null != tags.remove( name ));
-  }
+	/**
+	 * Un-registers (removes) a registered tag.
+	 *
+	 * @param name <code>String</code> the tag's name
+	 * @return <code>boolean</code> true if tag was registered befoire and now successfuly removed.
+	 */
+	public boolean unregisterTag(String name)
+	{
+		return (null != tags.remove(name));
+	}
 
-  /**
-   * @return <code>Map</code> - all registered tags.
-   * <pre>Use athe tag names to get to the factories</pre>
-   */
-  public Map<?, ?> getTagClasses() {
-    return tags;
-  }
+	/**
+	 * @return <code>Map</code> - all registered tags.
+	 * <pre>Use athe tag names to get to the factories</pre>
+	 */
+	public Map<String, Factory<?>> getTagClasses()
+	{
+		return tags;
+	}
 
-  /**
-   * Returns the Factory that is currently registered for the given Tag name
-   * @param name <code>String</code>
-   * @return <code>Factory</code> - regsitered for the given tag name
-   */
-  public Factory getFactory( String name ) {
-    return (Factory) tags.get( name.toLowerCase() );
-  }
+	/**
+	 * Returns the Factory that is currently registered for the given Tag name
+	 * @param name <code>String</code>
+	 * @return <code>Factory</code> - regsitered for the given tag name
+	 */
+	public Factory<?> getFactory(String name)
+	{
+		return tags.get(name.toLowerCase());
+	}
 
-  /**
-   * Returns the Factory that is currently registered for the given Tag name
-   * @param template <code>Class</code>
-   * @return <code>Factory</code> - regsitered for the given tag name
-   */
-  public Factory getFactory( Class<?> template ) {
-    Factory factory = null;
-    Iterator<?> it = tags.values().iterator();
-    while (it != null && it.hasNext()) {
-      Factory f = (Factory) it.next();
-      if (f.getTemplate().equals( template )) {
-        factory = f;
-        break;
-      }
-    }
-    return factory;
-  }
+	/**
+	 * Returns the Factory that is currently registered for the given Tag name
+	 * @param template <code>Class</code>
+	 * @return <code>Factory</code> - regsitered for the given tag name
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> Factory<T> getFactory(Class<T> template)
+	{
+		Factory<T> factory = null;
+		Iterator<Factory<?>> it = tags.values().iterator();
+		while (it != null && it.hasNext())
+		{
+			Factory<?> f = it.next();
+			if (f.getTemplate().equals(template))
+			{
+				factory = (Factory<T>) f;
+				break;
+			}
+		}
+		return factory;
+	}
 
 }

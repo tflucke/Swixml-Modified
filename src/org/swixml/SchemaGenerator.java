@@ -132,7 +132,7 @@ public class SchemaGenerator {
       Element elem = schema.createElementNS(NAMESPACE_URI,"element");
       elem.setPrefix(NAMESPACE_PREFIX);
       elem.setAttribute("name", name.toString());
-      elem.appendChild(addSwixmlAttr(schema, (Factory) taglib.getTagClasses().get(name)));
+      elem.appendChild(addSwixmlAttr(schema, taglib.getTagClasses().get(name)));
       root.appendChild(elem);
     }
     return root;
@@ -158,7 +158,7 @@ public class SchemaGenerator {
    * @param factory <code>Factory</code.
    * @return <code>Element</code> - the complex type element, container for the attribute tags.
    */
-  private static Element addSwixmlAttr(Document schema, Factory factory) {
+  private static Element addSwixmlAttr(Document schema, Factory<?> factory) {
     Set<String> set = new HashSet<String>();
     Element elem = schema.createElementNS(NAMESPACE_URI,"complexType");
     elem.setPrefix(NAMESPACE_PREFIX);

@@ -111,17 +111,17 @@ public final class SwingTagLibrary extends TagLibrary
 		registerTag("Glue", XGlue.class);
 		registerTag("GridBagConstraints", XGridBagConstraints.class);
 		registerTag("InternalFrame", JInternalFrame.class);
-		registerTag("Label", new DefaultFactory(JLabel.class)
+		registerTag("Label", new DefaultFactory<JLabel>(JLabel.class)
 		{
 			@Override
-			public Object newInstance(Element element, Parser parser, Object initParameter) throws Exception
+			public JLabel newInstance(Element element, Parser parser, Object initParameter) throws Exception
 			{
-				Object result = super.newInstance(element, parser, initParameter);
+				JLabel result = super.newInstance(element, parser, initParameter);
 				NamedNodeMap attrs = element.getAttributes();
 				for (int i = 0; i < attrs.getLength(); i++)
 				if (((Attribute) attrs.item(i)).getName().equalsIgnoreCase("LabelFor"))
 				{
-					parser.setLabel((JLabel) result, ((Attribute) attrs.item(i)).getValue());
+					parser.setLabel(result, ((Attribute) attrs.item(i)).getValue());
 				}
 				return result;
 			}

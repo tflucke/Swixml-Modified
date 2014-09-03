@@ -425,7 +425,7 @@ public class Parser
 	 */
 	Object getSwing(Element element, Object obj) throws Exception
 	{
-		Factory factory = engine.getTaglib().getFactory(element.getNodeName());
+		Factory<?> factory = engine.getTaglib().getFactory(element.getNodeName());
 		//  look for <id> attribute value
 		String id = Attribute.getAttributeValue(element, Parser.ATTR_ID) != null ? Attribute
 				.getAttributeValue(element, Parser.ATTR_ID).trim() : null;
@@ -795,7 +795,7 @@ public class Parser
 	 *                   <br>container.BOTTOM_ALIGNMENT
 	 *                   </p>
 	 */
-	private List<Attribute> applyAttributes(Object obj, Factory factory, List<Attribute> attributes)
+	private List<Attribute> applyAttributes(Object obj, Factory<?> factory, List<Attribute> attributes)
 			throws Exception
 	{
 		//
@@ -910,7 +910,7 @@ public class Parser
 						if (obj instanceof RootPaneContainer)
 						{
 							Container rootpane = ((RootPaneContainer) obj).getContentPane();
-							Factory f = engine.getTaglib().getFactory(rootpane.getClass());
+							Factory<?> f = engine.getTaglib().getFactory(rootpane.getClass());
 							Method m = f.guessSetter(attr.getName());
 							try
 							{
