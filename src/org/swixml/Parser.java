@@ -1345,4 +1345,9 @@ public class Parser
 	{
 		lbl_map.put(result, value);
 	}
+	
+	public SwingEngine getEngine()
+	{
+		return engine;
+	}
 }
