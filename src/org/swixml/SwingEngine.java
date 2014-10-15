@@ -173,7 +173,7 @@ public class SwingEngine
 	/**
 	 * Swing object map, contains only those object that were given an id attribute.
 	 */
-	private Map<String, Object> idmap = new HashMap<String, Object>();
+	private Map<String, Object> idmap = new HashMap<>();
 	/**
 	 * Flattened Swing object tree, contains all object, even the ones without an id.
 	 */
@@ -675,7 +675,7 @@ public class SwingEngine
 	 *
 	 * @return <code>Iterator</code> GUI components itearator
 	 */
-	public Iterator<?> getAllComponentItertor()
+	public Iterator<Component> getAllComponentItertor()
 	{
 		if (components == null)
 		{
@@ -689,7 +689,7 @@ public class SwingEngine
 	 *
 	 * @return <code>Iterator</code> GUI components itearator
 	 */
-	public Iterator<?> getIdComponentItertor()
+	public Iterator<Object> getObjectIdItertor()
 	{
 		return idmap.values().iterator();
 	}
