@@ -49,28 +49,39 @@
  individuals on behalf of the Swixml Project and was originally
  created by Wolf Paulus <wolf_AT_swixml_DOT_org>. For more information
  on the Swixml Project, please see <http://www.swixml.org/>.
-*/
+ */
 package org.swixml;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 /**
- * Interface containg action implementation for broader use, e.g. in multiple frames, dialog.
+ * Interface containg action implementation for broader use, e.g. in multiple
+ * frames, dialog.
+ * 
  * @author Wolf Paulus
  */
-public interface GlobalActions {
-  Action quitAction = new AbstractAction() {
-    public void actionPerformed(ActionEvent arg0) {
-      // Quit the program...
-      System.exit(0);
-    }
-  };
+public interface GlobalActions
+{
+	Action quitAction = new AbstractAction()
+	{
+		private static final long serialVersionUID = -838048201909219582L;
 
-  Action aboutAction = new AbstractAction() {
-    public  void actionPerformed(ActionEvent arg0) {
-      //show 'About Application' dialog
-      JOptionPane.showMessageDialog(null, "Test Case");
-    }
-  };
+		public void actionPerformed(ActionEvent arg0)
+		{
+			// Quit the program...
+			System.exit(0);
+		}
+	};
+	
+	Action aboutAction = new AbstractAction()
+	{
+		private static final long serialVersionUID = -4358489161049932137L;
+
+		public void actionPerformed(ActionEvent arg0)
+		{
+			// show 'About Application' dialog
+			JOptionPane.showMessageDialog(null, "Test Case");
+		}
+	};
 }

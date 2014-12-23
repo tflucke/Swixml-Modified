@@ -49,7 +49,7 @@
  individuals on behalf of the Swixml Project and was originally
  created by Wolf Paulus <wolf_AT_swixml_DOT_org>. For more information
  on the Swixml Project, please see <http://www.swixml.org/>.
-*/
+ */
 package org.swixml.converters;
 
 import junit.framework.TestCase;
@@ -59,30 +59,38 @@ import javax.swing.*;
 import org.swixml.Attribute;
 
 /**
- * <code>PrimitiveConverterTest</code> JScrollPane.class gets added to the Primitive Converter.
- * However, its constants are not added since they are all defined in an additional interface, i.e.
- * <code>ScrollPaneConstants</code>
+ * <code>PrimitiveConverterTest</code> JScrollPane.class gets added to the
+ * Primitive Converter.
+ * However, its constants are not added since they are all defined in an
+ * additional interface, i.e. <code>ScrollPaneConstants</code>
+ * 
  * @author <a href="mailto:wolf@wolfpaulus.com">Wolf Paulus</a>
  */
-public class PrimitiveConverterTest extends TestCase {
-
-
-  public PrimitiveConverterTest() {
-    this(PrimitiveConverterTest.class.getSimpleName());
-  }
-
-  public PrimitiveConverterTest(String string) {
-    super(string);
-    
-  }
-
-  /**
-   * This test worked successfully only after PrimitiveConverter also <code>implements ScrollPaneConstants</code>
-   * @throws Exception
-   * @see ScrollPaneConstants
-   */
-  public void testConstantAvailability() throws Exception {
-    Object obj= PrimitiveConverter.conv(JScrollPane.class,new Attribute("orientation","VERTICAL_SCROLLBAR_ALWAYS"),null);
-    TestCase.assertNotNull(obj);
-  }
+public class PrimitiveConverterTest extends TestCase
+{
+	
+	public PrimitiveConverterTest()
+	{
+		this(PrimitiveConverterTest.class.getSimpleName());
+	}
+	
+	public PrimitiveConverterTest(String string)
+	{
+		super(string);
+		
+	}
+	
+	/**
+	 * This test worked successfully only after PrimitiveConverter also
+	 * <code>implements ScrollPaneConstants</code>
+	 * 
+	 * @throws Exception
+	 * @see ScrollPaneConstants
+	 */
+	public void testConstantAvailability() throws Exception
+	{
+		Object obj = PrimitiveConverter.conv(JScrollPane.class, new Attribute(
+		        "orientation", "VERTICAL_SCROLLBAR_ALWAYS"), null);
+		TestCase.assertNotNull(obj);
+	}
 }

@@ -49,7 +49,7 @@
  individuals on behalf of the Swixml Project and was originally
  created by Wolf Paulus <wolf_AT_swixml_DOT_org>. For more information
  on the Swixml Project, please see <http://www.swixml.org/>.
-*/
+ */
 package org.swixml;
 
 import junit.framework.TestCase;
@@ -64,55 +64,68 @@ import java.awt.*;
  *
  * @author Wolf Paulus
  */
-public class ConverterTest extends TestCase {
-
-  private static final String DESCRIPTOR = "xml/converter.xml";
-  private Container container;
-  private JPanel pnl;  // auto bound through Swixml
-
-
-  public ConverterTest() {
-    super("Test converter related things");
-  }
-
-  public ConverterTest(String s) {
-    super(s);
-  }
-
-  /**
-   * Renders the test GUI into the container field.<br>
-   * Note: Like with every testcase, the setup method is going to be performed before
-   * the execution of every test..() method.
-   *
-   * @throws Exception
-   */
-  public void setUp() throws Exception {
-    SwingEngine.DEBUG_MODE = true;
-    SwingEngine se = new SwingEngine(this);
-    container = se.render(ConverterTest.DESCRIPTOR);
-
-  }
-
-  /**
-   * Clears the container
-   */
-  public void teardown() {
-    container.removeAll();
-    container = null;
-  }
-
-  /**
-   * Tests the BorderConverter
-   */
-  public void testBorderConverter() {
-    TestCase.assertNotNull("JPanel pnl auto bound through Swixml", pnl);
-    Border border = pnl.getBorder();
-    TestCase.assertNotNull("panel elem. has a border attribute def. in the XML Descriptor", border);
-    TestCase.assertTrue("XML Descriptor declared a TitledBorder for this Panel", border.getClass().isAssignableFrom(TitledBorder.class));
-    TitledBorder tb = (TitledBorder) border;
-    TestCase.assertEquals("Title like set in XML", "myTitle", tb.getTitle());
-    TestCase.assertEquals("Title Font like set in XML", Font.decode("VERDANA-BOLD-18"), tb.getTitleFont());
-    TestCase.assertEquals("Title Justification like set in XML", TitledBorder.CENTER, tb.getTitleJustification());
-    TestCase.assertEquals("Title Position like set in XML", TitledBorder.BELOW_BOTTOM, tb.getTitlePosition());
-  }
+public class ConverterTest extends TestCase
+{
+	
+	private static final String DESCRIPTOR = "xml/converter.xml";
+	private Container container;
+	private JPanel pnl;  // auto bound through Swixml
+	
+	public ConverterTest()
+	{
+		super("Test converter related things");
+	}
+	
+	public ConverterTest(String s)
+	{
+		super(s);
+	}
+	
+	/**
+	 * Renders the test GUI into the container field.<br>
+	 * Note: Like with every testcase, the setup method is going to be performed
+	 * before
+	 * the execution of every test..() method.
+	 *
+	 * @throws Exception
+	 */
+	public void setUp() throws Exception
+	{
+		SwingEngine.DEBUG_MODE = true;
+		SwingEngine se = new SwingEngine(this);
+		container = se.render(ConverterTest.DESCRIPTOR);
+		
+	}
+	
+	/**
+	 * Clears the container
+	 */
+	public void teardown()
+	{
+		container.removeAll();
+		container = null;
+	}
+	
+	/**
+	 * Tests the BorderConverter
+	 */
+	public void testBorderConverter()
+	{
+		TestCase.assertNotNull("JPanel pnl auto bound through Swixml", pnl);
+		Border border = pnl.getBorder();
+		TestCase.assertNotNull(
+		        "panel elem. has a border attribute def. in the XML Descriptor",
+		        border);
+		TestCase.assertTrue(
+		        "XML Descriptor declared a TitledBorder for this Panel", border
+		                .getClass().isAssignableFrom(TitledBorder.class));
+		TitledBorder tb = (TitledBorder) border;
+		TestCase.assertEquals("Title like set in XML", "myTitle", tb.getTitle());
+		TestCase.assertEquals("Title Font like set in XML",
+		        Font.decode("VERDANA-BOLD-18"), tb.getTitleFont());
+		TestCase.assertEquals("Title Justification like set in XML",
+		        TitledBorder.CENTER, tb.getTitleJustification());
+		TestCase.assertEquals("Title Position like set in XML",
+		        TitledBorder.BELOW_BOTTOM, tb.getTitlePosition());
+	}
 }

@@ -49,7 +49,7 @@
  individuals on behalf of the Swixml Project and was originally
  created by Wolf Paulus <wolf_AT_swixml_DOT_org>. For more information
  on the Swixml Project, please see <http://www.swixml.org/>.
-*/
+ */
 package org.swixml;
 
 import junit.framework.TestCase;
@@ -59,39 +59,50 @@ import java.awt.*;
 /**
  * Test for some JMenuBar specialties.
  */
-public class MenuTest extends TestCase {
-  public static final String DESCRIPTOR = "xml/dialog.xml";
-  private Container container;
-  private SwingEngine se;
-
-  public MenuTest() {
-    super("Test inserting a Menu into a container.");
-  }
-
-  public MenuTest(String s) {
-    super(s);
-  }
-
-  public void setUp() throws Exception {
-    se = new SwingEngine(this);
-    container = se.render(MenuTest.DESCRIPTOR);
-  }
-
-  /**
-   * Clears the container
-   */
-  public void teardown() {
-    container.removeAll();
-    container = null;
-  }
-
-  /**
-   * Tests if a JMenubar is added into a container, even if the container doesn't provide
-   * a setJMenuBar() method.
-   */
-  public void testInclusioin() {
-    Component menubar = se.find("menubar");
-    TestCase.assertNotNull("<menubar> tag in the descriptor requires the instantiation of a JMenuBar obj.", menubar);
-    TestCase.assertNotNull("Since <menubar> is not the root tag, it needs a parent container", menubar.getParent());
-  }
+public class MenuTest extends TestCase
+{
+	public static final String DESCRIPTOR = "xml/dialog.xml";
+	private Container container;
+	private SwingEngine se;
+	
+	public MenuTest()
+	{
+		super("Test inserting a Menu into a container.");
+	}
+	
+	public MenuTest(String s)
+	{
+		super(s);
+	}
+	
+	public void setUp() throws Exception
+	{
+		se = new SwingEngine(this);
+		container = se.render(MenuTest.DESCRIPTOR);
+	}
+	
+	/**
+	 * Clears the container
+	 */
+	public void teardown()
+	{
+		container.removeAll();
+		container = null;
+	}
+	
+	/**
+	 * Tests if a JMenubar is added into a container, even if the container
+	 * doesn't provide
+	 * a setJMenuBar() method.
+	 */
+	public void testInclusioin()
+	{
+		Component menubar = se.find("menubar");
+		TestCase.assertNotNull(
+		        "<menubar> tag in the descriptor requires the instantiation of a JMenuBar obj.",
+		        menubar);
+		TestCase.assertNotNull(
+		        "Since <menubar> is not the root tag, it needs a parent container",
+		        menubar.getParent());
+	}
 }

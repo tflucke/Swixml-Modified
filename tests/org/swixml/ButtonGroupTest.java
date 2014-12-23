@@ -49,7 +49,7 @@
  individuals on behalf of the Swixml Project and was originally
  created by Wolf Paulus <wolf_AT_swixml_DOT_org>. For more information
  on the Swixml Project, please see <http://www.swixml.org/>.
-*/
+ */
 package org.swixml;
 
 import junit.framework.TestCase;
@@ -57,75 +57,99 @@ import junit.framework.TestCase;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Enumeration;
+
 /**
- * The somewhat odd ButtonGroup class doesn't really fit into the way Swixml deals with
+ * The somewhat odd ButtonGroup class doesn't really fit into the way Swixml
+ * deals with
  * objects it has instatiated. It therefore deserves its very own test class.
  */
-public class ButtonGroupTest extends TestCase {
-
-  public static final String DESCRIPTOR = "xml/mappings.xml";
-  private Container container;
-  private SwingEngine se;
-
-  private JRadioButton am, fm;
-  private ButtonGroup radio;
-
-  public ButtonGroupTest() {
-    super("Test the Mapping and behavior of a ButtonGroup.");
-  }
-
-  /**
-   * Renders the test GUI into the container field.<br>
-   * Note: Like with every testcase, the setup method is going to be performed before
-   * the execution of every test..() method.
-   *
-   * @throws Exception
-   */
-  public void setUp() throws Exception {
-    se = new SwingEngine(this);
-    container = se.render(MappingTest.DESCRIPTOR);
-  }
-
-  /**
-   * Clears the container
-   */
-  public void teardown() {
-    se = null;
-    container.removeAll();
-    container = null;
-  }
-
-  /**
-   * Tests if the Fields were correctly initialized/mapped by the SwingEngine.
-   */
-  public void testMapping() {
-    TestCase.assertTrue("IDMap's EntrySet needs to contain the ButtonGroup's ID", se.getIdMap().containsKey("radio"));
-    TestCase.assertNotNull("Private Field, whose names have a matching ids the the XML descriptor should be initializd by the SwingEngine.", radio);
-    TestCase.assertNotNull("Public Fields, whose names have matching ids the the XML descriptor should be initializd by the SwingEngine.", am);
-    TestCase.assertNotNull("Public Fields, whose names have matching ids the the XML descriptor should be initializd by the SwingEngine.", fm);
-  }
-
-  /**
-   * Test that one and only one of the buttons in the group can be selected
-   */
-  public void testXOR() {
-    am.setSelected(true);
-    TestCase.assertTrue(am.isSelected());
-    TestCase.assertFalse("Only one RadioButton in the group should be flagged selected.", fm.isSelected());
-    fm.setSelected(true);
-    TestCase.assertFalse("Only one RadioButton in the group should be flagged selected.", am.isSelected());
-    TestCase.assertTrue(fm.isSelected());
-  }
-
-  /**
-   * Test that the buttons are actually being added into the button group
-   */
-  public void testStructure() {
-    Enumeration e =  radio.getElements();
-    while (e.hasMoreElements()) {
-      Object obj = e.nextElement();
-      TestCase.assertTrue (am.equals(obj) ^ fm.equals(obj));
-    }
-    TestCase.assertEquals("There should be two buttons in this group",radio.getButtonCount(),2);
-  }
+public class ButtonGroupTest extends TestCase
+{
+	
+	public static final String DESCRIPTOR = "xml/mappings.xml";
+	private Container container;
+	private SwingEngine se;
+	
+	private JRadioButton am, fm;
+	private ButtonGroup radio;
+	
+	public ButtonGroupTest()
+	{
+		super("Test the Mapping and behavior of a ButtonGroup.");
+	}
+	
+	/**
+	 * Renders the test GUI into the container field.<br>
+	 * Note: Like with every testcase, the setup method is going to be performed
+	 * before
+	 * the execution of every test..() method.
+	 *
+	 * @throws Exception
+	 */
+	public void setUp() throws Exception
+	{
+		se = new SwingEngine(this);
+		container = se.render(MappingTest.DESCRIPTOR);
+	}
+	
+	/**
+	 * Clears the container
+	 */
+	public void teardown()
+	{
+		se = null;
+		container.removeAll();
+		container = null;
+	}
+	
+	/**
+	 * Tests if the Fields were correctly initialized/mapped by the SwingEngine.
+	 */
+	public void testMapping()
+	{
+		TestCase.assertTrue(
+		        "IDMap's EntrySet needs to contain the ButtonGroup's ID", se
+		                .getIdMap().containsKey("radio"));
+		TestCase.assertNotNull(
+		        "Private Field, whose names have a matching ids the the XML descriptor should be initializd by the SwingEngine.",
+		        radio);
+		TestCase.assertNotNull(
+		        "Public Fields, whose names have matching ids the the XML descriptor should be initializd by the SwingEngine.",
+		        am);
+		TestCase.assertNotNull(
+		        "Public Fields, whose names have matching ids the the XML descriptor should be initializd by the SwingEngine.",
+		        fm);
+	}
+	
+	/**
+	 * Test that one and only one of the buttons in the group can be selected
+	 */
+	public void testXOR()
+	{
+		am.setSelected(true);
+		TestCase.assertTrue(am.isSelected());
+		TestCase.assertFalse(
+		        "Only one RadioButton in the group should be flagged selected.",
+		        fm.isSelected());
+		fm.setSelected(true);
+		TestCase.assertFalse(
+		        "Only one RadioButton in the group should be flagged selected.",
+		        am.isSelected());
+		TestCase.assertTrue(fm.isSelected());
+	}
+	
+	/**
+	 * Test that the buttons are actually being added into the button group
+	 */
+	public void testStructure()
+	{
+		Enumeration<AbstractButton> e = radio.getElements();
+		while (e.hasMoreElements())
+		{
+			Object obj = e.nextElement();
+			TestCase.assertTrue(am.equals(obj) ^ fm.equals(obj));
+		}
+		TestCase.assertEquals("There should be two buttons in this group",
+		        radio.getButtonCount(), 2);
+	}
 }

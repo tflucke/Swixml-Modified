@@ -49,7 +49,7 @@
  individuals on behalf of the Swixml Project and was originally
  created by Wolf Paulus <wolf_AT_swixml_DOT_org>. For more information
  on the Swixml Project, please see <http://www.swixml.org/>.
-*/
+ */
 package org.swixml;
 
 import junit.framework.TestCase;
@@ -60,36 +60,50 @@ import java.awt.*;
 /**
  * Testcase for localization of Strings and comma separated lists of strings.
  */
-public class LocalizationTest extends TestCase {
-  public static final String DESCRIPTOR = "xml/local.xml";
-
-  private JButton btn1, btn2, btn3, btn4, btn5; // set through Swixml
-  private JTabbedPane tpane;   // set Through Swixml
-  private Container container;
-
-  public LocalizationTest() throws Exception {
-    this("Test Localization of for key strings and comma separated keys");
-  }
-
-  public LocalizationTest(String s) throws Exception {
-    super(s);
-    container = new SwingEngine(this).render(DESCRIPTOR);
-  }
-
-  public void testLocalization() {
-    TestCase.assertNotNull("UI needs to be instantiated", container);
-    TestCase.assertEquals("Simple String Lookup should match", "Hello World", btn1.getText());
-    TestCase.assertEquals("Simple String Lookup should match", "Hello, World", btn2.getText());
-    TestCase.assertEquals("Simple String Lookup should match", "Alpha", btn3.getText());
-    TestCase.assertEquals("Key without matching Value should return key", "abcdef0123456", btn4.getText());
-    TestCase.assertEquals("Key without matching Value should return key", "abcdef,0123456", btn5.getText());
-  }
-
-  public void testStringListLocalization() {
-    TestCase.assertEquals("TabbedPane with 3 tabs expected", 3, tpane.getTabCount());
-    TestCase.assertEquals("Tab Title was set through Swixml", "Alpha", tpane.getTitleAt(0));
-    TestCase.assertEquals("Tab Title was set through Swixml", "Bravo", tpane.getTitleAt(1));
-    TestCase.assertEquals("Tab Title was set through Swixml", "Charlie", tpane.getTitleAt(2));
-  }
-
+public class LocalizationTest extends TestCase
+{
+	public static final String DESCRIPTOR = "xml/local.xml";
+	
+	private JButton btn1, btn2, btn3, btn4, btn5; // set through Swixml
+	private JTabbedPane tpane;   // set Through Swixml
+	private Container container;
+	
+	public LocalizationTest() throws Exception
+	{
+		this("Test Localization of for key strings and comma separated keys");
+	}
+	
+	public LocalizationTest(String s) throws Exception
+	{
+		super(s);
+		container = new SwingEngine(this).render(DESCRIPTOR);
+	}
+	
+	public void testLocalization()
+	{
+		TestCase.assertNotNull("UI needs to be instantiated", container);
+		TestCase.assertEquals("Simple String Lookup should match",
+		        "Hello World", btn1.getText());
+		TestCase.assertEquals("Simple String Lookup should match",
+		        "Hello, World", btn2.getText());
+		TestCase.assertEquals("Simple String Lookup should match", "Alpha",
+		        btn3.getText());
+		TestCase.assertEquals("Key without matching Value should return key",
+		        "abcdef0123456", btn4.getText());
+		TestCase.assertEquals("Key without matching Value should return key",
+		        "abcdef,0123456", btn5.getText());
+	}
+	
+	public void testStringListLocalization()
+	{
+		TestCase.assertEquals("TabbedPane with 3 tabs expected", 3,
+		        tpane.getTabCount());
+		TestCase.assertEquals("Tab Title was set through Swixml", "Alpha",
+		        tpane.getTitleAt(0));
+		TestCase.assertEquals("Tab Title was set through Swixml", "Bravo",
+		        tpane.getTitleAt(1));
+		TestCase.assertEquals("Tab Title was set through Swixml", "Charlie",
+		        tpane.getTitleAt(2));
+	}
+	
 }

@@ -49,65 +49,74 @@
  individuals on behalf of the Swixml Project and was originally
  created by Wolf Paulus <wolf_AT_swixml_DOT_org>. For more information
  on the Swixml Project, please see <http://www.swixml.org/>.
-*/
+ */
 package org.swixml;
 
 import junit.framework.TestCase;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
 /**
  * Test class running id and refid related tests.
+ * 
  * @author Wolf Paulus
  */
-public class IdTest extends TestCase {
-  public static final String DESCRIPTOR = "xml/id.xml";
-  private Container container;
-  private JPanel pnl1, pnl11, pnl2;
-  private JButton btn1, btn2,btn3;
-  private boolean b1, b2;
-  public Action a1 = new AbstractAction() {
-    public void actionPerformed(ActionEvent e) {
-      b1 = true;
-    }
-  };
+public class IdTest extends TestCase
+{
+	public static final String DESCRIPTOR = "xml/id.xml";
+	@SuppressWarnings("unused")
+    private Container container;
+	private JPanel pnl1, pnl11, pnl2;
+	private JButton btn1, btn2, btn3;
+	private boolean b1, b2;
+	public Action a1 = new AbstractAction()
+	{
+		private static final long serialVersionUID = 6649960716395063704L;
 
-  public void m1() {
-    b2 = true;
-  }
-
-
-  public IdTest() throws Exception {
-    super("ID Tests");
-    SwingEngine.DEBUG_MODE = true;
-    container = new SwingEngine(this).render(DESCRIPTOR);
-  }
-
-  public void testRefId() {
-    TestCase.assertNotNull(pnl1);
-    TestCase.assertNotNull(pnl11);
-    TestCase.assertNotNull(pnl2);
-
-    TestCase.assertEquals(Color.red, pnl1.getBackground());
-    TestCase.assertEquals(pnl1.getBackground(), pnl2.getBackground());
-    TestCase.assertNotSame(pnl1.getBackground(), pnl11.getBackground());
-    TestCase.assertEquals(pnl1.getFont(), pnl11.getFont());
-    TestCase.assertNotSame(pnl1.getFont(), pnl2.getFont());
-
-    TestCase.assertNotNull(btn1.getAction());
-    TestCase.assertNotNull(btn2.getAction());
-    TestCase.assertNotNull(btn3.getAction());
-
-    TestCase.assertEquals(btn1.getAction(), btn3.getAction());
-    TestCase.assertNotSame(btn1.getAction(), btn2.getAction());
-    TestCase.assertFalse(b2);
-    btn2.doClick();
-    TestCase.assertTrue(b2);
-    TestCase.assertFalse(b1);
-    btn3.doClick();
-    TestCase.assertTrue(b1);
-  }
+		public void actionPerformed(ActionEvent e)
+		{
+			b1 = true;
+		}
+	};
+	
+	public void m1()
+	{
+		b2 = true;
+	}
+	
+	public IdTest() throws Exception
+	{
+		super("ID Tests");
+		SwingEngine.DEBUG_MODE = true;
+		container = new SwingEngine(this).render(DESCRIPTOR);
+	}
+	
+	public void testRefId()
+	{
+		TestCase.assertNotNull(pnl1);
+		TestCase.assertNotNull(pnl11);
+		TestCase.assertNotNull(pnl2);
+		
+		TestCase.assertEquals(Color.red, pnl1.getBackground());
+		TestCase.assertEquals(pnl1.getBackground(), pnl2.getBackground());
+		TestCase.assertNotSame(pnl1.getBackground(), pnl11.getBackground());
+		TestCase.assertEquals(pnl1.getFont(), pnl11.getFont());
+		TestCase.assertNotSame(pnl1.getFont(), pnl2.getFont());
+		
+		TestCase.assertNotNull(btn1.getAction());
+		TestCase.assertNotNull(btn2.getAction());
+		TestCase.assertNotNull(btn3.getAction());
+		
+		TestCase.assertEquals(btn1.getAction(), btn3.getAction());
+		TestCase.assertNotSame(btn1.getAction(), btn2.getAction());
+		TestCase.assertFalse(b2);
+		btn2.doClick();
+		TestCase.assertTrue(b2);
+		TestCase.assertFalse(b1);
+		btn3.doClick();
+		TestCase.assertTrue(b1);
+	}
 }
-

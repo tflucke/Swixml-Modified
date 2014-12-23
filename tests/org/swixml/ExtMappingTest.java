@@ -49,7 +49,7 @@
  individuals on behalf of the Swixml Project and was originally
  created by Wolf Paulus <wolf_AT_swixml_DOT_org>. For more information
  on the Swixml Project, please see <http://www.swixml.org/>.
-*/
+ */
 package org.swixml;
 
 import junit.framework.TestCase;
@@ -58,38 +58,54 @@ import javax.swing.*;
 
 /**
  * Automatic mapping may have to deal with class hierarchies as well.
- * This Test class extends the MappingTest, which already defines some members that need to be mapped.
+ * This Test class extends the MappingTest, which already defines some members
+ * that need to be mapped.
+ * 
  * @author Wolf Paulus
  */
-public class ExtMappingTest extends MappingTest {
-
-  public JButton b1;
-  private JButton b2;
-  private JButton b5;
-
-  public ExtMappingTest() {
-  }
-
-  public ExtMappingTest(String s) {
-    super(s);
-  }
-
-  public void setUp() throws Exception {
-    super.setUp();
-  }
-
-  public void teardown() {
-    super.teardown();
-  }
-
-
-  /**
-   * Tests if the JButtons were correctly initialized/mapped by the SwingEngine.
-   */
-  public void testMappingPublicFields() {
-    TestCase.assertNotNull("Public Fields, whose names have matching ids the the XML descriptor should be initializd by the SwingEngine.", b1);
-    TestCase.assertNotNull("Public Fields, whose names have matching ids the the XML descriptor should be initializd by the SwingEngine.", super.b1);
-    TestCase.assertNotNull("Private Field, whose names have a matching ids the the XML descriptor should be initializd by the SwingEngine.", b2);
-    TestCase.assertNotNull("Private Field, whose names have a matching ids the the XML descriptor should be initializd by the SwingEngine.", b5);
-  }
+public class ExtMappingTest extends MappingTest
+{
+	
+	public JButton b1;
+	private JButton b2;
+	private JButton b5;
+	
+	public ExtMappingTest()
+	{
+	}
+	
+	public ExtMappingTest(String s)
+	{
+		super(s);
+	}
+	
+	public void setUp() throws Exception
+	{
+		super.setUp();
+	}
+	
+	public void teardown()
+	{
+		super.teardown();
+	}
+	
+	/**
+	 * Tests if the JButtons were correctly initialized/mapped by the
+	 * SwingEngine.
+	 */
+	public void testMappingPublicFields()
+	{
+		TestCase.assertNotNull(
+		        "Public Fields, whose names have matching ids the the XML descriptor should be initializd by the SwingEngine.",
+		        b1);
+		TestCase.assertNotNull(
+		        "Public Fields, whose names have matching ids the the XML descriptor should be initializd by the SwingEngine.",
+		        super.b1);
+		TestCase.assertNotNull(
+		        "Private Field, whose names have a matching ids the the XML descriptor should be initializd by the SwingEngine.",
+		        b2);
+		TestCase.assertNotNull(
+		        "Private Field, whose names have a matching ids the the XML descriptor should be initializd by the SwingEngine.",
+		        b5);
+	}
 }
