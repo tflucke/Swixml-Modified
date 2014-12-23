@@ -1,4 +1,3 @@
-
 import org.swixml.SwingEngine;
 
 import javax.swing.*;
@@ -9,35 +8,50 @@ import java.awt.event.ActionEvent;
  *
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
- *
  * @since swixml (#101)
  */
-public class Accelerator {
-  private static final String DESCRIPTOR = "xml/accelerator.xml";
-  SwingEngine swix = new SwingEngine( this );
+public class Accelerator
+{
+	private static final String DESCRIPTOR = "xml/accelerator.xml";
+	SwingEngine swix = new SwingEngine(this);
+	
+	public Accelerator() throws Exception
+	{
+		swix.render(Accelerator.DESCRIPTOR).setVisible(true);
+	}
+	
+	public Action newAction = new AbstractAction()
+	{
+		private static final long serialVersionUID = 7469574193456304138L;
 
-  public Accelerator() throws Exception {
-    swix.render( Accelerator.DESCRIPTOR ).setVisible( true );
-  }
+		public void actionPerformed(ActionEvent e)
+		{
+			JOptionPane.showMessageDialog(swix.getRootComponent(),
+			        "Sorry, not implemented yet.");
+		}
+	};
+	
+	public Action aboutAction = new AbstractAction()
+	{
+		private static final long serialVersionUID = -880070627160411780L;
 
-  public Action newAction = new AbstractAction() {
-    public void actionPerformed( ActionEvent e ) {
-      JOptionPane.showMessageDialog( swix.getRootComponent(), "Sorry, not implemented yet." );
-    }
-  };
-
-  public Action aboutAction = new AbstractAction() {
-    public void actionPerformed( ActionEvent e ) {
-      JOptionPane.showMessageDialog( swix.getRootComponent(), "This is the Accelerator Example." );
-    }
-  };
-
-  public static void main( String[] args ) {
-    try {
-      new Accelerator();
-    } catch (Exception e) {
-      System.err.println( e.getMessage() );
-    }
-  }
-
+		public void actionPerformed(ActionEvent e)
+		{
+			JOptionPane.showMessageDialog(swix.getRootComponent(),
+			        "This is the Accelerator Example.");
+		}
+	};
+	
+	public static void main(String[] args)
+	{
+		try
+		{
+			new Accelerator();
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getMessage());
+		}
+	}
+	
 }

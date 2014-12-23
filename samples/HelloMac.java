@@ -1,4 +1,3 @@
-
 import org.swixml.SwingEngine;
 
 import javax.swing.*;
@@ -15,54 +14,74 @@ import com.apple.eio.FileManager;
  *
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
- *
  * @since swixml 1.1
  */
-public class HelloMac  extends WindowAdapter {
-  private SwingEngine swix;
+public class HelloMac extends WindowAdapter
+{
+	private SwingEngine swix;
+	
+	private HelloMac() throws Exception
+	{
+		swix = new SwingEngine(this);
+		swix.render("xml/hellomac.xml");
+		swix.getRootComponent().setVisible(true);
+	}
+	
+	public Action actionAbout = new AbstractAction()
+	{
+		private static final long serialVersionUID = -560362497804754309L;
 
-  private HelloMac() throws Exception {
-    swix= new SwingEngine( this );
-    swix.render( "xml/hellomac.xml" );    
-    swix.getRootComponent().setVisible( true );
-  }
+		public void actionPerformed(ActionEvent e)
+		{
+			JOptionPane.showMessageDialog(swix.getRootComponent(),
+			        "This is the Mac OS X Example.");
+		}
+	};
+	
+	public Action actionHelp = new AbstractAction()
+	{
+		private static final long serialVersionUID = -5505039605419175306L;
 
-  public Action actionAbout = new AbstractAction() {
-    public void actionPerformed( ActionEvent e ) {
-      JOptionPane.showMessageDialog( swix.getRootComponent(), "This is the Mac OS X Example." );
-    }
-  };
+		public void actionPerformed(ActionEvent e)
+		{
+			try
+			{
+				FileManager.openURL("http://www.swixml.org/apidocs/index.html");
+			}
+			catch (IOException e1)
+			{
+				e1.printStackTrace();
+			}
+		}
+	};
+	
+	public Action actionExit = new AbstractAction()
+	{
+		private static final long serialVersionUID = 8375479992643487161L;
 
-  public Action actionHelp = new AbstractAction() {
-    public void actionPerformed( ActionEvent e ) {
-      try {
-        FileManager.openURL("http://www.swixml.org/apidocs/index.html");
-      } catch (IOException e1) {
-        e1.printStackTrace();
-      }
-    }
-  };
-
-  public Action actionExit = new AbstractAction() {
-    public void actionPerformed( ActionEvent e ) {
-      JOptionPane.showMessageDialog( swix.getRootComponent(), swix.getLocalizer().getString("mis_Exit"));
-      HelloMac.this.windowClosing(null);
-    }
-  };
-
-  /**
-   * Invoked when a window is in the process of being closed.
-   * The close operation can be overridden at this point.
-   */
-  public void windowClosing( WindowEvent e ) {
-    super.windowClosing( e );
-    System.exit(0);
-  }
-
-  //
-  //  Make the class bootable
-  //
-  public static void main( String[] args ) throws Exception {
-    new HelloMac();
-  }
+		public void actionPerformed(ActionEvent e)
+		{
+			JOptionPane.showMessageDialog(swix.getRootComponent(), swix
+			        .getLocalizer().getString("mis_Exit"));
+			HelloMac.this.windowClosing(null);
+		}
+	};
+	
+	/**
+	 * Invoked when a window is in the process of being closed.
+	 * The close operation can be overridden at this point.
+	 */
+	public void windowClosing(WindowEvent e)
+	{
+		super.windowClosing(e);
+		System.exit(0);
+	}
+	
+	//
+	// Make the class bootable
+	//
+	public static void main(String[] args) throws Exception
+	{
+		new HelloMac();
+	}
 }

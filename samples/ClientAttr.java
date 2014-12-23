@@ -1,4 +1,3 @@
-
 import org.swixml.SwingEngine;
 
 import javax.swing.*;
@@ -10,30 +9,40 @@ import java.awt.event.WindowAdapter;
  *
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.1 $
- *
  * @since swixml 0.98
  */
-public class ClientAttr extends WindowAdapter {
-  private SwingEngine swix = new SwingEngine( this );
+public class ClientAttr extends WindowAdapter
+{
+	private SwingEngine swix = new SwingEngine(this);
+	
+	public JButton btn;
+	public JTextArea ta;
+	public Action show = new AbstractAction()
+	{
+		private static final long serialVersionUID = -1227969329788258566L;
 
-  public JButton btn;
-  public JTextArea ta;
-  public Action show = new AbstractAction() {
-    public void actionPerformed( ActionEvent e ) {
-      ta.setText( "X:" + btn.getClientProperty( "X" ) + "\n" + "Y:" + btn.getClientProperty( "Y" ) );
-    }
-  };
-
-  private ClientAttr() {
-    try {
-      swix.render( "xml/clientattr.xml" ).setVisible( true );
-      swix.forget( "x" );
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  public static void main( String[] args ) {
-    new ClientAttr();
-  }
+		public void actionPerformed(ActionEvent e)
+		{
+			ta.setText("X:" + btn.getClientProperty("X") + "\n" + "Y:"
+			        + btn.getClientProperty("Y"));
+		}
+	};
+	
+	private ClientAttr()
+	{
+		try
+		{
+			swix.render("xml/clientattr.xml").setVisible(true);
+			swix.forget("x");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args)
+	{
+		new ClientAttr();
+	}
 }

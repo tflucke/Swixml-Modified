@@ -5,7 +5,7 @@ import org.swixml.Localizer;
 import java.util.SimpleTimeZone;
 
 public class TimeZoneConverter extends Converter<SimpleTimeZone>
-{	
+{
 	/**
 	 * A <code>Converters</code> conversTo method informs about the Class type
 	 * the converter
@@ -19,7 +19,6 @@ public class TimeZoneConverter extends Converter<SimpleTimeZone>
 		return SimpleTimeZone.class;
 	}
 	
-
 	/**
 	 * Convert the value of the given <code>Attribute</code> object into an
 	 * output object of the

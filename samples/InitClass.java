@@ -1,4 +1,3 @@
-
 import org.swixml.SwingEngine;
 
 import javax.swing.*;
@@ -14,23 +13,33 @@ import java.awt.event.WindowAdapter;
  * @since swixml 0.76
  */
 
-public class InitClass extends WindowAdapter {
-  public Action DO_SELECT = new AbstractAction() {
-    public void actionPerformed(ActionEvent e) {
-      System.out.println( ((JComboBox) e.getSource()).getSelectedItem().toString() );
-    }
-  };
+public class InitClass extends WindowAdapter
+{
+	public Action DO_SELECT = new AbstractAction()
+	{
+		private static final long serialVersionUID = 8758489639689428625L;
 
-  private InitClass() throws Exception {
-    new SwingEngine( this ).render( "xml/initclass.xml" ).setVisible( true );
-  }
-
-  public static void main(String[] args) {
-    try {
-      new InitClass();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+		public void actionPerformed(ActionEvent e)
+		{
+			System.out.println(((JComboBox<?>) e.getSource()).getSelectedItem()
+			        .toString());
+		}
+	};
+	
+	private InitClass() throws Exception
+	{
+		new SwingEngine(this).render("xml/initclass.xml").setVisible(true);
+	}
+	
+	public static void main(String[] args)
+	{
+		try
+		{
+			new InitClass();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 }
-
