@@ -49,130 +49,151 @@
  individuals on behalf of the Swixml Project and was originally
  created by Wolf Paulus <wolf_AT_swixml_DOT_org>. For more information
  on the Swixml Project, please see <http://www.swixml.org/>.
-*/
+ */
 package doclet;
-
 
 import org.swixml.*;
 
-
 import java.io.*;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Comparator;
 import java.lang.reflect.Method;
 
 /**
  * The Documenter writers SwiXml TAG and ATTRIBUTE documention HTML-formatted.
+ * 
  * @author <a href="mailto:wolf@paulus.com">Wolf Paulus</a>
  * @version $Revision: 1.2 $
  */
 
-public class Documenter {
-  private static final String DIR = "./build/tagdocs/";
-  private static final String API = "http://docs.oracle.com/javase/7/docs/api/";
-  private Map tags = SwingTagLibrary.getInstance().getTagClasses();
-  private Map converters = ConverterLibrary.getInstance().getConverters();
-
-  public static void main( String[] args ) {
-    Documenter doccer = new Documenter();
-    try {
-      doccer.taginfo();
-      doccer.converterinfo();
-    } catch (IOException e) {
-      System.err.println( e.getMessage() );
-    }
-  }
-
-
-  /**
-   * Writes HTML-formatted inforamtion about the registered factories
-   */
-  public void taginfo() throws IOException {
-    Writer w = new BufferedWriter( new FileWriter( new File( DIR + "swixmenu.html" ) ) );
-    Object[] keys = tags.keySet().toArray();
-    Arrays.sort( keys );
-
-    w.write( "<html><head><LINK REL ='stylesheet' TYPE='text/css' HREF='swixml.css' TITLE='Style'></head>" );
-    w.write( "<body leftmargin='2'><ul>" );
-    w.write( "<li><a href='../2007/swixml.xsd' target='_blank'>Swixml XML-Schema</a></li>" );
-    w.write( "<li><a href='customattr.html' target='content'>Custom Swixml Attributes</a></li>" );
-    w.write( "<li><a href='converters.html' target='content'>Custom Attr. Converters</a></li><hr>" );
-
-    for (int i = 0; i < keys.length; i++) {
-      w.write( "<li><a href='" + keys[i] + ".html' target='content'>" + keys[i] + "</a></li>" );
-    }
-    w.write( "</ul></body></html>" );
-    w.close();
-
-    for (int i = 0; i < keys.length; i++) {
-      Factory factory = (Factory) tags.get( keys[i] );
-      String link = null;
-      if (0>factory.getTemplate().getName().indexOf("javax")) {
-        link = factory.getTemplate().getSuperclass().getName().replace( '.', '/' ) + ".html";
-      }
-      if (link==null) {
-        link = factory.getTemplate().getName().replace( '.', '/' ) + ".html";
-      }
-
-      w = new BufferedWriter( new FileWriter( new File( DIR + keys[i] + ".html" ) ) );
-      w.write( "<html><head><LINK REL ='stylesheet' TYPE='text/css' HREF='swixml.css' TITLE='Style'></head>" );
-      w.write( "<body><h2>xml tag name: " + keys[i] + "</h2><h3>Swing obj.: <a href='" + API + link + "'>" + factory.getTemplate().getName() + "</a></h3><hr>" );
-      w.write( "<h4>valid xml attributes:</h4>" );
-      w.write( "<table cellspacing='2' cellpadding='4'  border='1'><thead><tr><th>Attribute Name</th><th>Attribute Type<br>(after conversion)</th><th>Method to be invoked</th><th>Method declaring Class</th></tr></thead><tbody>" );
-
-
-      Object[] ms = factory.getSetters().toArray();
-      Arrays.sort( ms,new Comparator() {
-        public int compare( Object o1, Object o2 ) {
-          Method m1= (Method) o1;
-          Method m2= (Method) o2;
-          return m1.getName().compareTo(m2.getName());
-        }
-      });
-
-      for (int j = 0; j< ms.length; j++) {
-        Method m = (Method) ms[j];
-        String declaringClass = m.getDeclaringClass().getName().replace( '.', '/' ) + ".html";
-        Class type = m.getParameterTypes()[0];
-        String name = m.getName().substring( 3 );
-
-        String para = type.getName();
-        para = para.substring( para.lastIndexOf( '.' ) + 1 );
-
-        w.write( "<tr><td><b>" + name + "</b></td>" );
-        w.write( "<td>" + para + "</td>" );
-        w.write( "<td><a href='" + API + declaringClass + "#set" + name + "(" + type.getName() + ")'>" + m.getName() + "</a></td>" );
-        w.write( "<td>" + m.getDeclaringClass().getName() + "</td></tr>" );
-
-      }
-
-      w.write( "</tbody></table><hr>Copyright (c) 2002 - 2014 - Wolf Paulus <a href='http://www.swixml.org' target='_top'>swixml.org</a>. All Rights Reserved.</body></html>" );
-      w.close();
-    }
-  }
-
-
-  /**
-   * Writes HTML-formatted information about the registered factories
-   */
-  public void converterinfo() throws IOException {
-    Writer w = new BufferedWriter( new FileWriter( new File( DIR + "converters.html" ) ) );
-
-    w.write( "<html><head><title>Converter Library</title><LINK REL ='stylesheet' TYPE='text/css' HREF='swixml.css' TITLE='Style'></head><body>" );
-    w.write( "<h3>These Object convert Strings into objects used as parameters to Swing setters.</h3>" );
-    w.write( "<hr><table cellspacing='2' cellpadding='4' border='1'><thead><th>Target</th><th>Factory</th></thead><tbody>" );
-
-    Object[] keys = converters.keySet().toArray();
-
-    for (int i = 0; i < keys.length; i++) {
-
-      Converter converter = (Converter) converters.get( keys[i] );
-      w.write( "<tr><td>" + ((Class) keys[i]).getName() + "</td>" );
-      w.write( "<td>" + converter.getClass().getName() + "</td></tr>" );
-    }
-    w.write( "</tbody></table><hr>Copyright (c) 2002 - 2014 - Wolf Paulus <a href='http://www.swixml.org' target='_top'>swixml.org</a>. All Rights Reserved.</body></html>" );
-    w.close();
-  }
+public class Documenter
+{
+	private static final String DIR = "./build/tagdocs/";
+	private static final String API = "http://docs.oracle.com/javase/7/docs/api/";
+	private Map<String, Factory<?>> tags = SwingTagLibrary.getInstance().getTagClasses();
+	private Map<Class<?>, Converter<?>> converters = ConverterLibrary.getInstance().getConverters();
+	
+	public static void main(String[] args)
+	{
+		Documenter doccer = new Documenter();
+		try
+		{
+			doccer.taginfo();
+			doccer.converterinfo();
+		}
+		catch (IOException e)
+		{
+			System.err.println(e.getMessage());
+		}
+	}
+	
+	/**
+	 * Writes HTML-formatted inforamtion about the registered factories
+	 */
+	public void taginfo() throws IOException
+	{
+		Writer w = new BufferedWriter(new FileWriter(new File(DIR
+		        + "swixmenu.html")));
+		String[] keys = tags.keySet().toArray(new String[0]);
+		Arrays.sort(keys);
+		
+		w.write("<html><head><LINK REL ='stylesheet' TYPE='text/css' HREF='swixml.css' TITLE='Style'></head>");
+		w.write("<body leftmargin='2'><ul>");
+		w.write("<li><a href='../2007/swixml.xsd' target='_blank'>Swixml XML-Schema</a></li>");
+		w.write("<li><a href='customattr.html' target='content'>Custom Swixml Attributes</a></li>");
+		w.write("<li><a href='converters.html' target='content'>Custom Attr. Converters</a></li><hr>");
+		
+		for (int i = 0; i < keys.length; i++)
+		{
+			w.write("<li><a href='" + keys[i] + ".html' target='content'>"
+			        + keys[i] + "</a></li>");
+		}
+		w.write("</ul></body></html>");
+		w.close();
+		
+		for (int i = 0; i < keys.length; i++)
+		{
+			Factory<?> factory = tags.get(keys[i]);
+			String link = null;
+			if (0 > factory.getTemplate().getName().indexOf("javax"))
+			{
+				link = factory.getTemplate().getSuperclass().getName()
+				        .replace('.', '/')
+				        + ".html";
+			}
+			if (link == null)
+			{
+				link = factory.getTemplate().getName().replace('.', '/')
+				        + ".html";
+			}
+			
+			w = new BufferedWriter(new FileWriter(new File(DIR + keys[i]
+			        + ".html")));
+			w.write("<html><head><LINK REL ='stylesheet' TYPE='text/css' HREF='swixml.css' TITLE='Style'></head>");
+			w.write("<body><h2>xml tag name: " + keys[i]
+			        + "</h2><h3>Swing obj.: <a href='" + API + link + "'>"
+			        + factory.getTemplate().getName() + "</a></h3><hr>");
+			w.write("<h4>valid xml attributes:</h4>");
+			w.write("<table cellspacing='2' cellpadding='4'  border='1'><thead><tr><th>Attribute Name</th><th>Attribute Type<br>(after conversion)</th><th>Method to be invoked</th><th>Method declaring Class</th></tr></thead><tbody>");
+			
+			Method[] ms = factory.getSetters().toArray(new Method[0]);
+			Arrays.sort(ms, new Comparator<Method>()
+			{
+				public int compare(Method m1, Method m2)
+				{
+					return m1.getName().compareTo(m2.getName());
+				}
+			});
+			
+			for (int j = 0; j < ms.length; j++)
+			{
+				Method m = ms[j];
+				String declaringClass = m.getDeclaringClass().getName()
+				        .replace('.', '/')
+				        + ".html";
+				Class<?> type = m.getParameterTypes()[0];
+				String name = m.getName().substring(3);
+				
+				String para = type.getName();
+				para = para.substring(para.lastIndexOf('.') + 1);
+				
+				w.write("<tr><td><b>" + name + "</b></td>");
+				w.write("<td>" + para + "</td>");
+				w.write("<td><a href='" + API + declaringClass + "#set" + name
+				        + "(" + type.getName() + ")'>" + m.getName()
+				        + "</a></td>");
+				w.write("<td>" + m.getDeclaringClass().getName() + "</td></tr>");
+				
+			}
+			
+			w.write("</tbody></table><hr>Copyright (c) 2002 - 2014 - Wolf Paulus <a href='http://www.swixml.org' target='_top'>swixml.org</a>. All Rights Reserved.</body></html>");
+			w.close();
+		}
+	}
+	
+	/**
+	 * Writes HTML-formatted information about the registered factories
+	 */
+	public void converterinfo() throws IOException
+	{
+		Writer w = new BufferedWriter(new FileWriter(new File(DIR
+		        + "converters.html")));
+		
+		w.write("<html><head><title>Converter Library</title><LINK REL ='stylesheet' TYPE='text/css' HREF='swixml.css' TITLE='Style'></head><body>");
+		w.write("<h3>These Object convert Strings into objects used as parameters to Swing setters.</h3>");
+		w.write("<hr><table cellspacing='2' cellpadding='4' border='1'><thead><th>Target</th><th>Factory</th></thead><tbody>");
+		
+		Class<?>[] keys = converters.keySet().toArray(new Class<?>[0]);
+		
+		for (int i = 0; i < keys.length; i++)
+		{
+			
+			Converter<?> converter = converters.get(keys[i]);
+			w.write("<tr><td>" + keys[i].getName() + "</td>");
+			w.write("<td>" + converter.getClass().getName() + "</td></tr>");
+		}
+		w.write("</tbody></table><hr>Copyright (c) 2002 - 2014 - Wolf Paulus <a href='http://www.swixml.org' target='_top'>swixml.org</a>. All Rights Reserved.</body></html>");
+		w.close();
+	}
 }
